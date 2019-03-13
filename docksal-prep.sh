@@ -19,33 +19,33 @@ echo-yellow () { echo -e "${yellow}$1${NC}"; }
 set -e
 
 echo -e "${green_bg} Step 1 ${NC}${green} Updating packages...${NC}"
-apt-get -y install apt-utils pv > /dev/null
-apt-get update > /dev/null
+apt-get -y install apt-utils pv
+apt-get update
 
 # Install packages to allow apt to use a repository over HTTPS
-apt-get -y install apt-transport-https ca-certificates gnupg2 software-properties-common host > /dev/null
+apt-get -y install apt-transport-https ca-certificates gnupg2 software-properties-common host
 # Add Docker’s official GPG key
 # curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
 
 # Install Oh my ZSH
 echo -e "${green_bg} Step 2 ${NC}${green} Installing required packages (curl, zsh, git, gcc, etc.)...${NC}"
-apt-get -y install curl zsh git gcc p7zip-full tmux > /dev/null
+apt-get -y install curl zsh git gcc p7zip-full tmux
 
 # LetsEncrypt Certbot
 echo -e "${green_bg} Step 3 ${NC}${green} Installing LetsEncrypt...${NC}"
-apt-get -y install certbot > /dev/null
+apt-get -y install certbot
 
 echo -e "${green_bg} Step 4 ${NC}${green} Creating the 'docksal' user and setting it up...${NC}"
 # Add docksal as a sudo group with no password
 echo "docksal ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 # Create the docksal user
-adduser --disabled-password --gecos "" --shell /usr/bin/zsh docksal > /dev/null
+adduser --disabled-password --gecos "" --shell /usr/bin/zsh docksal
 # Assign the docksal group to the user
-usermod -aG docksal docksal > /dev/null
+usermod -aG docksal docksal
 # Make sure the SSH key is in place
-mkdir /home/docksal/.ssh > /dev/null
-cp /root/.ssh/authorized_keys /home/docksal/.ssh > /dev/null
-chown -R docksal:docksal /home/docksal/.ssh > /dev/null
+mkdir /home/docksal/.ssh
+cp /root/.ssh/authorized_keys /home/docksal/.ssh
+chown -R docksal:docksal /home/docksal/.ssh
 
 # Set SSH to run with NO password, just SSH keys
 echo -e "${green_bg} Step 5 ${NC}${green} Securing the server to accept no passwords, just SSH keys, non-root logins...${NC}"
@@ -62,20 +62,20 @@ cd /home/docksal
 
 # Install Oh my Zsh
 echo -e "${green_bg} Step 7 ${NC}${green} Installing Oh My ZSH!...${NC}"
-runuser -l docksal -c "zsh -c $(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" > /dev/null
+runuser -l docksal -c "zsh -c $(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 runuser -l docksal -c "echo 'alias s=\"cd ..\"' >> /home/docksal/.zshrc"
 runuser -l docksal -c "sed -i 's/ZSH_THEME=\".*\"/ZSH_THEME=\"bira\"/g' /home/docksal/.zshrc"
 
 # Clone VimProc
-runuser -l docksal -c "git clone https://github.com/Shougo/vimproc.vim.git" > /dev/null
+runuser -l docksal -c "git clone https://github.com/Shougo/vimproc.vim.git"
 
 # Install SpaceVIM
 echo -e "${green_bg} Step 8 ${NC}${green} Installing SpaceVIM...${NC}"
-runuser -l docksal -c "curl -sLf https://spacevim.org/install.sh | bash" > /dev/null
+runuser -l docksal -c "curl -sLf https://spacevim.org/install.sh | bash"
 runuser -l docksal -c "sed -i 's/colorscheme = \".*\"/colorscheme = \"SpaceVim\"/g' /home/docksal/.SpaceVim.d/init.toml"
 
 # Add Vim Twig support
-runuser -l docksal -c "git clone https://github.com/lumiliet/vim-twig.git" > /dev/null
+runuser -l docksal -c "git clone https://github.com/lumiliet/vim-twig.git"
 runuser -l docksal -c "echo '' >> /home/docksal/.SpaceVim.d/init.toml"
 runuser -l docksal -c "echo '# Vim Twig support' >> /home/docksal/.SpaceVim.d/init.toml"
 runuser -l docksal -c "echo '[[custom_plugins]]' >> /home/docksal/.SpaceVim.d/init.toml"
