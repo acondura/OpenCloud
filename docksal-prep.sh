@@ -20,7 +20,7 @@ set -e
 
 echo -e "${green_bg} Step 1 ${NC}${green} Updating packages...${NC}"
 
-echo "US/Newark" > /etc/timezone
+echo "Europe/Bucharest" > /etc/timezone
 # dpkg-reconfigure -f noninteractive tzdata
 
 apt-get -y install apt-utils pv
