@@ -19,6 +19,10 @@ echo-yellow () { echo -e "${yellow}$1${NC}"; }
 set -e
 
 echo -e "${green_bg} Step 1 ${NC}${green} Updating packages...${NC}"
+
+echo "US/New York" > /etc/timezone
+dpkg-reconfigure -f noninteractive tzdata
+
 apt-get -y install apt-utils pv
 apt-get update
 
