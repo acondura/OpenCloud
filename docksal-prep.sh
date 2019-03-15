@@ -32,7 +32,7 @@ apt-get -y install apt-transport-https ca-certificates gnupg2 software-propertie
 
 # Install Oh my ZSH
 echo -e "${green_bg} Step 2 ${NC}${green} Installing required packages (curl, zsh, git, gcc, etc.)...${NC}"
-apt-get -y install curl zsh git gcc p7zip-full tmux
+apt-get -y install sudo curl zsh git gcc p7zip-full tmux
 
 # LetsEncrypt Certbot
 echo -e "${green_bg} Step 3 ${NC}${green} Installing LetsEncrypt...${NC}"
@@ -47,7 +47,7 @@ adduser --disabled-password --gecos "" --shell /usr/bin/zsh docksal
 usermod -aG docksal docksal
 # Make sure the SSH key is in place
 mkdir /home/docksal/.ssh
-cp /root/.ssh/authorized_keys /home/docksal/.ssh
+cp -rf /root/.ssh/authorized_keys /home/docksal/.ssh
 chown -R docksal:docksal /home/docksal/.ssh
 
 # Set SSH to run with NO password, just SSH keys
