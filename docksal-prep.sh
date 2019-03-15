@@ -20,8 +20,7 @@ set -e
 
 echo -e "${green_bg} Step 1 ${NC}${green} Updating packages...${NC}"
 
-echo "Europe/Bucharest" > /etc/timezone
-# dpkg-reconfigure -f noninteractive tzdata
+export DEBIAN_FRONTEND=noninteractive
 
 apt-get -y install apt-utils pv
 apt-get update
