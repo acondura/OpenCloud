@@ -62,7 +62,7 @@ chown docksal:docksal /home/docksal/.zshrc
 
 # Install Oh my Zsh
 echo -e "${green_bg} Step 7 ${NC}${green} Installing Oh My ZSH!...${NC}"
-runuser -l docksal -c "cd /home/docksal; zsh -c $(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+runuser -l docksal -c "cd /home/docksal; bash -c $(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 runuser -l docksal -c "cd /home/docksal; echo 'alias s=\"cd ..\"' >> /home/docksal/.zshrc"
 runuser -l docksal -c "cd /home/docksal; sed -i 's/ZSH_THEME=\".*\"/ZSH_THEME=\"bira\"/g' /home/docksal/.zshrc"
 
