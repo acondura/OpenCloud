@@ -38,7 +38,7 @@ apt-get -y install sudo curl zsh git gcc p7zip-full tmux
 echo -e "${green_bg} Step 3 ${NC}${green} Installing LetsEncrypt...${NC}"
 apt-get -y install certbot
 
-echo -e "${green_bg} Step 4 ${NC}${green} Creating the 'docksal' user and setting it up...${NC}"
+echo -e "${green_bg} Step 4 ${NC}${green} Creating the 'docksal' user...${NC}"
 # Add docksal as a sudo group with no password
 echo "docksal ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 # Create the docksal user
@@ -56,7 +56,7 @@ sed -i 's/PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
 sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
 sed -i 's/#   PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/ssh_config
 
-echo -e "${green_bg} Step 6 ${NC}${green} Creating the 'docksal' user...${NC}"
+echo -e "${green_bg} Step 6 ${NC}${green} Setting up the 'docksal' user...${NC}"
 touch /home/docksal/.zshrc
 chown docksal:docksal /home/docksal/.zshrc
 
