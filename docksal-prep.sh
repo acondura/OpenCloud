@@ -62,32 +62,32 @@ chown docksal:docksal /home/docksal/.zshrc
 
 # Install Oh my Zsh
 echo -e "${green_bg} Step 7 ${NC}${green} Installing Oh My ZSH!...${NC}"
-runuser -l docksal -c "cd /home/docksal; bash -c $(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-runuser -l docksal -c "cd /home/docksal; echo 'alias s=\"cd ..\"' >> /home/docksal/.zshrc"
-runuser -l docksal -c "cd /home/docksal; sed -i 's/ZSH_THEME=\".*\"/ZSH_THEME=\"bira\"/g' /home/docksal/.zshrc"
+runuser -u docksal -c "cd /home/docksal; bash -c $(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+runuser -u docksal -c "cd /home/docksal; echo 'alias s=\"cd ..\"' >> /home/docksal/.zshrc"
+runuser -u docksal -c "cd /home/docksal; sed -i 's/ZSH_THEME=\".*\"/ZSH_THEME=\"bira\"/g' /home/docksal/.zshrc"
 
 # Clone VimProc
-runuser -l docksal -c "cd /home/docksal; git clone https://github.com/Shougo/vimproc.vim.git"
+runuser -u docksal -c "cd /home/docksal; git clone https://github.com/Shougo/vimproc.vim.git"
 
 # Install SpaceVIM
 echo -e "${green_bg} Step 8 ${NC}${green} Installing SpaceVIM...${NC}"
-runuser -l docksal -c "cd /home/docksal; curl -sLf https://spacevim.org/install.sh | bash"
-runuser -l docksal -c "cd /home/docksal; sed -i 's/colorscheme = \".*\"/colorscheme = \"SpaceVim\"/g' /home/docksal/.SpaceVim.d/init.toml"
+runuser -u docksal -c "cd /home/docksal; curl -sLf https://spacevim.org/install.sh | bash"
+runuser -u docksal -c "cd /home/docksal; sed -i 's/colorscheme = \".*\"/colorscheme = \"SpaceVim\"/g' /home/docksal/.SpaceVim.d/init.toml"
 
 # Add Vim Twig support
-runuser -l docksal -c "cd /home/docksal; git clone https://github.com/lumiliet/vim-twig.git"
-runuser -l docksal -c "cd /home/docksal; echo '' >> /home/docksal/.SpaceVim.d/init.toml"
-runuser -l docksal -c "cd /home/docksal; echo '# Vim Twig support' >> /home/docksal/.SpaceVim.d/init.toml"
-runuser -l docksal -c "cd /home/docksal; echo '[[custom_plugins]]' >> /home/docksal/.SpaceVim.d/init.toml"
-runuser -l docksal -c "cd /home/docksal; echo 'name = \"lumiliet/vim-twig\"' >> /home/docksal/.SpaceVim.d/init.toml"
-runuser -l docksal -c "cd /home/docksal; echo 'merged = false' >> /home/docksal/.SpaceVim.d/init.toml"
+runuser -u docksal -c "cd /home/docksal; git clone https://github.com/lumiliet/vim-twig.git"
+runuser -u docksal -c "cd /home/docksal; echo '' >> /home/docksal/.SpaceVim.d/init.toml"
+runuser -u docksal -c "cd /home/docksal; echo '# Vim Twig support' >> /home/docksal/.SpaceVim.d/init.toml"
+runuser -u docksal -c "cd /home/docksal; echo '[[custom_plugins]]' >> /home/docksal/.SpaceVim.d/init.toml"
+runuser -u docksal -c "cd /home/docksal; echo 'name = \"lumiliet/vim-twig\"' >> /home/docksal/.SpaceVim.d/init.toml"
+runuser -u docksal -c "cd /home/docksal; echo 'merged = false' >> /home/docksal/.SpaceVim.d/init.toml"
 
 # Install Docksal
 echo -e "${green_bg} Step 9 ${NC}${green} Installing Docksal...${NC}"
-runuser -l docksal -c 'cd /home/docksal; curl -fsSL get.docksal.io | zsh'
-runuser -l docksal -c 'cd /home/docksal; newgrp docker'
+runuser -u docksal -c 'cd /home/docksal; curl -fsSL get.docksal.io | zsh'
+runuser -u docksal -c 'cd /home/docksal; newgrp docker'
 
 # Set the proxy ip in the global docksal environment file.
-runuser -l docksal -c "cd /home/docksal; echo 'DOCKSAL_VHOST_PROXY_IP=\"0.0.0.0\"' > /home/docksal/.docksal/docksal.env"
+runuser -u docksal -c "cd /home/docksal; echo 'DOCKSAL_VHOST_PROXY_IP=\"0.0.0.0\"' > /home/docksal/.docksal/docksal.env"
 # Reset the system.
-runuser -l docksal -c 'cd /home/docksal; fin reset system'
+runuser -u docksal -c 'cd /home/docksal; fin reset system'
