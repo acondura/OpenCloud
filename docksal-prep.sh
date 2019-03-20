@@ -66,8 +66,8 @@ chown docksal:docksal /home/docksal/.zshrc
 # Install Oh my Zsh
 echo -e "${green_bg} Step 7 ${NC}${green} Installing Oh My ZSH!...${NC}"
 runuser -u docksal "bash -c \"$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)\""
-runuser -u docksal "cd /home/docksal; echo 'alias s=\"cd ..\"' >> /home/docksal/.zshrc"
-runuser -u docksal "cd /home/docksal; sed -i 's/ZSH_THEME=\".*\"/ZSH_THEME=\"bira\"/g' /home/docksal/.zshrc"
+runuser -u docksal "echo 'alias s=\"cd ..\"' >> /home/docksal/.zshrc"
+runuser -u docksal "sed -i 's/ZSH_THEME=\".*\"/ZSH_THEME=\"bira\"/g' /home/docksal/.zshrc"
 
 # Clone VimProc
 runuser -u docksal "cd /home/docksal; git clone https://github.com/Shougo/vimproc.vim.git"
