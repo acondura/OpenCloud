@@ -22,7 +22,6 @@ echo -e "${green_bg} Step 1 ${NC}${green} Updating packages...${NC}"
 
 export DEBIAN_FRONTEND=noninteractive
 
-apt-get -y install apt-utils pv
 # Update package info
 apt-get update
 # Upgrade packages
@@ -31,6 +30,7 @@ apt-get -y upgrade
 unattended-upgrade -d
 
 # Install packages to allow apt to use a repository over HTTPS
+apt-get -y install apt-utils pv
 apt-get -y install apt-transport-https ca-certificates gnupg2 software-properties-common host
 
 # Install Oh my ZSH
