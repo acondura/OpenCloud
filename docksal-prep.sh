@@ -70,9 +70,9 @@ fi
 
 # Install Oh my Zsh
 echo -e "${green_bg} Step 7 ${NC}${green} Installing Oh My ZSH!...${NC}"
-if [ -d /home/docksal/.oh-my-zsh ]; then
-  rm -rf /home/docksal/.oh-my-zsh
-  rm -rf /home/docksal/.zshrc
+if [ -d "/home/docksal/.oh-my-zsh" ]; then
+  rm -rf "/home/docksal/.oh-my-zsh"
+  rm -rf "/home/docksal/.zshrc"
 fi
 runuser -l docksal -c "curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh"
 runuser -l docksal -c "echo 'alias s=\"cd ..\"' >> /home/docksal/.zshrc"
