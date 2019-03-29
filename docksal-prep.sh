@@ -70,24 +70,25 @@ fi
 
 # Install Oh my Zsh
 echo -e "${green_bg} Step 7 ${NC}${green} Installing Oh My ZSH!...${NC}"
+if [ -d /home/docksal/.oh-my-zsh ]; then
+  rm -rf /home/docksal/.oh-my-zsh
+  rm -rf /home/docksal/.zshrc
+fi
 runuser -l docksal -c "curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh"
 runuser -l docksal -c "echo 'alias s=\"cd ..\"' >> /home/docksal/.zshrc"
 runuser -l docksal -c "sed -i 's/ZSH_THEME=\".*\"/ZSH_THEME=\"bira\"/g' /home/docksal/.zshrc"
 
 # Clone VimProc
+if [ -d /home/docksal/vimproc.vim ]; then
+  rm -rf /home/docksal/vimproc.vim
+fi
 runuser -l docksal -c "git clone https://github.com/Shougo/vimproc.vim.git"
 
 # Install SpaceVIM
 echo -e "${green_bg} Step 8 ${NC}${green} Installing SpaceVIM...${NC}"
-if [ -d /home/docksal/.oh-my-zsh ]; then
-  rm -rf /home/docksal/.oh-my-zsh
-fi
 runuser -l docksal -c "curl -sLf https://spacevim.org/install.sh | bash"
 
 # Add Vim Twig support
-if [ -d /home/docksal/vimproc.vim ]; then
-  rm -rf /home/docksal/vimproc.vim
-fi
 runuser -l docksal -c "git clone https://github.com/lumiliet/vim-twig.git"
 
 if [ -d /home/docksal/.SpaceVim.d ]; then
