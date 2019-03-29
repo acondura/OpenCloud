@@ -25,12 +25,12 @@ export DEBIAN_FRONTEND=noninteractive
 # Update package info
 apt-get update >/dev/null
 # Upgrade packages
+apt-get -y install apt-utils pv >/dev/null
 apt-get -y upgrade >/dev/null
 # This makes sure that ALL security updates are applied
 unattended-upgrade -d >/dev/null
 
 # Install packages to allow apt to use a repository over HTTPS
-apt-get -y install apt-utils pv >/dev/null
 apt-get -y install apt-transport-https ca-certificates gnupg2 software-properties-common host >/dev/null
 
 # Install Oh my ZSH
