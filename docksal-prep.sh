@@ -42,7 +42,7 @@ apt-get -y install sudo curl zsh git p7zip-full tmux >/dev/null
 echo -e "${green_bg} Step 3 ${NC}${green} Installing LetsEncrypt...${NC}"
 apt-get -y install certbot >/dev/null
 
-if id "$BRANCH" >/dev/null 2>&1; then
+if id "docksal" >/dev/null 2>&1; then
   echo "Docksal user exists, skipping..."
 else
   echo -e "${green_bg} Step 4 ${NC}${green} Creating the 'docksal' user...${NC}"
