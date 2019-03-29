@@ -148,9 +148,9 @@ chown -R docksal:docksal /home/docksal/.SpaceVim.d
 # Install Docksal
 echo -e "${green_bg} Step 9 ${NC}${green} Installing Docksal...${NC}"
 runuser -l docksal -c 'curl -fsSL get.docksal.io | zsh'
-runuser -l docksal -c 'newgrp docker'
+usermod -aG docker docksal
 
 # Set the proxy ip in the global docksal environment file.
-runuser -l docksal -c "echo 'DOCKSAL_VHOST_PROXY_IP=\"0.0.0.0\"' > /home/docksal/.docksal/docksal.env"
+runuser -l docksal -c "echo 'DOCKSAL_VHOST_PROXY_IP=\"0.0.0.0\"' >> /home/docksal/.docksal/docksal.env"
 # Reset the system.
-runuser -l docksal -c 'fin reset system'
+runuser -l docksal -c 'fin system reset'
