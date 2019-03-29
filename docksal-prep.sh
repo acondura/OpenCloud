@@ -79,12 +79,20 @@ runuser -l docksal -c "git clone https://github.com/Shougo/vimproc.vim.git"
 
 # Install SpaceVIM
 echo -e "${green_bg} Step 8 ${NC}${green} Installing SpaceVIM...${NC}"
+if [ -d /home/docksal/.oh-my-zsh ]; then
+  rm -rf /home/docksal/.oh-my-zsh
+fi
 runuser -l docksal -c "curl -sLf https://spacevim.org/install.sh | bash"
 
 # Add Vim Twig support
+if [ -d /home/docksal/vimproc.vim ]; then
+  rm -rf /home/docksal/vimproc.vim
+fi
 runuser -l docksal -c "git clone https://github.com/lumiliet/vim-twig.git"
 
-
+if [ -d /home/docksal/.SpaceVim.d ]; then
+  rm -rf /home/docksal/.SpaceVim.d
+fi
 mkdir /home/docksal/.SpaceVim.d
 cat <<EOC >>/home/docksal/.SpaceVim.d/init.toml
 #=============================================================================
