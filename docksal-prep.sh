@@ -23,24 +23,24 @@ echo -e "${green_bg} Step 1 ${NC}${green} Updating packages...${NC}"
 export DEBIAN_FRONTEND=noninteractive
 
 # Update package info
-apt-get update
+apt-get update >/dev/null
 # Upgrade packages
-apt-get -y upgrade
+apt-get -y upgrade >/dev/null
 # This makes sure that ALL security updates are applied
-unattended-upgrade -d
+unattended-upgrade -d >/dev/null
 
 # Install packages to allow apt to use a repository over HTTPS
-apt-get -y install apt-utils pv
-apt-get -y install apt-transport-https ca-certificates gnupg2 software-properties-common host
+apt-get -y install apt-utils pv >/dev/null
+apt-get -y install apt-transport-https ca-certificates gnupg2 software-properties-common host >/dev/null
 
 # Install Oh my ZSH
 echo -e "${green_bg} Step 2 ${NC}${green} Installing required packages (curl, zsh, git, gcc, etc.)...${NC}"
 rm -rf /etc/sudoers
-apt-get -y install sudo curl zsh git p7zip-full tmux
+apt-get -y install sudo curl zsh git p7zip-full tmux >/dev/null
 
 # LetsEncrypt Certbot
 echo -e "${green_bg} Step 3 ${NC}${green} Installing LetsEncrypt...${NC}"
-apt-get -y install certbot
+apt-get -y install certbot >/dev/null
 
 echo -e "${green_bg} Step 4 ${NC}${green} Creating the 'docksal' user...${NC}"
 # Add docksal as a sudo group with no password
