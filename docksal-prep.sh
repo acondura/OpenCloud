@@ -35,8 +35,7 @@ apt-get -y install apt-transport-https ca-certificates gnupg2 software-propertie
 
 # Install Oh my ZSH
 echo -e "${green_bg} Step 2 ${NC}${green} Installing required packages (curl, zsh, git, gcc, etc.)...${NC}"
-rm -rf /etc/sudoers
-apt-get -y install sudo curl zsh git p7zip-full tmux >/dev/null
+apt-get -y install curl zsh git p7zip-full tmux >/dev/null
 
 # LetsEncrypt Certbot
 echo -e "${green_bg} Step 3 ${NC}${green} Installing LetsEncrypt...${NC}"
@@ -46,6 +45,11 @@ if id "docksal" >/dev/null 2>&1; then
   echo "Docksal user exists, skipping..."
 else
   echo -e "${green_bg} Step 4 ${NC}${green} Creating the 'docksal' user...${NC}"
+
+  # This needs to run only once, when the 'docksal' user is created
+  rm -rf /etc/sudoers
+  apt-get -y install sudo
+
   # Add docksal as a sudo group with no password
   echo "docksal ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
   # Create the docksal user
