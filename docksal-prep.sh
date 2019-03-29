@@ -42,27 +42,31 @@ apt-get -y install sudo curl zsh git p7zip-full tmux >/dev/null
 echo -e "${green_bg} Step 3 ${NC}${green} Installing LetsEncrypt...${NC}"
 apt-get -y install certbot >/dev/null
 
-echo -e "${green_bg} Step 4 ${NC}${green} Creating the 'docksal' user...${NC}"
-# Add docksal as a sudo group with no password
-echo "docksal ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-# Create the docksal user
-adduser --disabled-password --gecos "" --shell /usr/bin/zsh docksal
-# Assign the docksal group to the user
-usermod -aG docksal docksal
-# Make sure the SSH key is in place
-mkdir /home/docksal/.ssh
-cp -rf /root/.ssh/authorized_keys /home/docksal/.ssh
-chown -R docksal:docksal /home/docksal/.ssh
+if id "$BRANCH" >/dev/null 2>&1; then
+  echo "Docksal user exists, skipping..."
+else
+  echo -e "${green_bg} Step 4 ${NC}${green} Creating the 'docksal' user...${NC}"
+  # Add docksal as a sudo group with no password
+  echo "docksal ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+  # Create the docksal user
+  adduser --disabled-password --gecos "" --shell /usr/bin/zsh docksal
+  # Assign the docksal group to the user
+  usermod -aG docksal docksal
+  # Make sure the SSH key is in place
+  mkdir /home/docksal/.ssh
+  cp -rf /root/.ssh/authorized_keys /home/docksal/.ssh
+  chown -R docksal:docksal /home/docksal/.ssh
 
-# Set SSH to run with NO password, just SSH keys
-echo -e "${green_bg} Step 5 ${NC}${green} Securing the server to accept no passwords, just SSH keys, non-root logins...${NC}"
-sed -i 's/PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
-sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
-sed -i 's/#   PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/ssh_config
+  # Set SSH to run with NO password, just SSH keys
+  echo -e "${green_bg} Step 5 ${NC}${green} Securing the server to accept no passwords, just SSH keys, non-root logins...${NC}"
+  sed -i 's/PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
+  sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
+  sed -i 's/#   PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/ssh_config
 
-echo -e "${green_bg} Step 6 ${NC}${green} Setting up the 'docksal' user...${NC}"
-touch /home/docksal/.zshrc
-chown docksal:docksal /home/docksal/.zshrc
+  echo -e "${green_bg} Step 6 ${NC}${green} Setting up the 'docksal' user...${NC}"
+  touch /home/docksal/.zshrc
+  chown docksal:docksal /home/docksal/.zshrc
+fi
 
 # Install Oh my Zsh
 echo -e "${green_bg} Step 7 ${NC}${green} Installing Oh My ZSH!...${NC}"
