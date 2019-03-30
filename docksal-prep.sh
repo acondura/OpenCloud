@@ -67,14 +67,25 @@ else
 
   # Set SSH to run with NO password, just SSH keys
   echo -e "${green_bg} Step 6 ${NC}${green} Securing the server to accept no passwords, just SSH keys and non-root logins${NC}"
+
+  ##### SSH Client settings (ssh_config)
+  sed -i '/.*PasswordAuthentication.*/d' /etc/ssh/ssh_config
+  echo 'PasswordAuthentication no' >> /etc/ssh/ssh_config
+  #-------------------------------------------------------
+
+  ##### SSH Server settings (sshd_config)
   sed -i '/.*PermitRootLogin.*/d' /etc/ssh/sshd_config
   echo 'PermitRootLogin no' >> /etc/ssh/sshd_config
 
   sed -i '/.*PasswordAuthentication.*/d' /etc/ssh/sshd_config
   echo 'PasswordAuthentication no' >> /etc/ssh/sshd_config
 
-  sed -i '/.*PasswordAuthentication.*/d' /etc/ssh/ssh_config
-  echo 'PasswordAuthentication no' >> /etc/ssh/ssh_config
+  sed -i '/.*TCPKeepAlive.*/d' /etc/ssh/sshd_config
+  echo 'TCPKeepAlive yes' >> /etc/ssh/sshd_config
+
+  sed -i '/.*ClientAliveInterval.*/d' /etc/ssh/sshd_config
+  echo 'ClientAliveInterval 300' >> /etc/ssh/sshd_config
+  #-------------------------------------------------------
 
   # Apply the above settings
   service ssh restart
