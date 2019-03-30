@@ -23,10 +23,10 @@ echo -e "${green_bg} Step 1 ${NC}${green} Updating packages...${NC}"
 export DEBIAN_FRONTEND=noninteractive
 
 # Update package info
-apt-get update >/dev/null
-# Upgrade packages
 apt-get -y install apt-utils pv >/dev/null
+apt-get update >/dev/null
 
+# Upgrade packages
 echo -e "${green_bg} Step 2 ${NC}${green} Upgrading and applying security updates...${NC}"
 apt-get -y upgrade >/dev/null
 # This makes sure that ALL security updates are applied
@@ -45,8 +45,9 @@ apt-get -y install certbot >/dev/null
 
 ######################## If 'docksal' user exists
 if id "docksal" >/dev/null 2>&1; then
-  echo "Docksal user exists, skipping a few steps..."
-else ################## If 'docksal' user DOES NOT exist
+  echo "Docksal user exists, start using it..."
+else 
+######################## If 'docksal' user DOES NOT exist
   echo -e "${green_bg} Step 5 ${NC}${green} Creating the 'docksal' user...${NC}"
 
   # This needs to run only once, when the 'docksal' user is created
@@ -74,6 +75,9 @@ else ################## If 'docksal' user DOES NOT exist
 
   sed -i '/.*PasswordAuthentication.*/d' /etc/ssh/ssh_config
   echo 'PasswordAuthentication no' >> /etc/ssh/ssh_config
+
+  # Apply the above settings
+  service ssh restart
 
   echo -e "${green_bg} Step 7 ${NC}${green} Setting up the 'docksal' user...${NC}"
   touch /home/docksal/.zshrc
@@ -165,8 +169,10 @@ EOC
   # Set the proxy ip in the global docksal environment file.
   runuser -l docksal -c "echo 'DOCKSAL_VHOST_PROXY_IP=\"0.0.0.0\"' >> /home/docksal/.docksal/docksal.env"
 
-fi
+  echo -e "${green} Making sure Docksal responds...${NC}"
+  runuser -l docksal -c 'fin system reset'
 
-# Reset the system.
-echo -e "${green} Making sure Docksal responds...${NC}"
-runuser -l docksal -c 'fin system reset'
+  echo -e "${green} Rebooting the server...${NC}"
+  reboot
+
+fi
