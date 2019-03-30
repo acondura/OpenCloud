@@ -1,33 +1,19 @@
-[![](https://www.drupal.org/files/styles/grid-3/public/project-images/Medium-Logo%20Color%20with%20padding.png)](http://www.drupal.org/project/varbase)
 
-[![Build Status](https://travis-ci.org/Vardot/varbase.svg?branch=8.x-6.6)](https://travis-ci.org/Vardot/varbase/builds/504091961) Varbase 8.6.6
+# OpenCloud
 
-# Varbase Project
+An open source cloud management solution which uses:
+- Docksal - as the 'engine' for a container based hosting
+- Drupal - as a user interface to control and command containers
 
-Project template for [Varbase distribution](http://www.drupal.org/project/varbase).
 
+## Installation
 
-## Create a Varbase project with [Composer](https://getcomposer.org/download/):
-
-To install the most recent stable release of Varbase 8.6.x run this command:
+1. Run the Docksal prep script
 ```
-composer create-project Vardot/varbase-project:^8.6.6 PROJECT_DIR_NAME --no-dev --no-interaction
-```
-
-To install the dev version of Varbase 8.6.x run this command:
-```
-composer create-project vardot/varbase-project:8.6.x-dev PROJECT_DIR_NAME --stability dev --no-interaction
+curl -fsSL https://raw.githubusercontent.com/acondura/OpenCloud/master/docksal-prep.sh | bash
 ```
 
-## [Create a new Vartheme sub theme for a project](https://github.com/Vardot/varbase/tree/8.x-6.x/scripts/README.md)
-
-## [Automated Functional Testing](https://github.com/Vardot/varbase/blob/8.x-6.x/tests/README.md)
-
-## [Varbase Gherkin features](https://github.com/Vardot/varbase/blob/8.x-6.x/tests/features/varbase/README.md)
-
-## [Varbase 8.6.x Developer Guide](https://docs.varbase.vardot.com)
-
-## [CHANGELOG for Varbase](https://github.com/Vardot/varbase/blob/8.x-6.x/CHANGELOG.md)
-
-## [General instructions on how to update Varbase](https://github.com/Vardot/varbase/blob/8.x-6.x/UPDATE.md)
-
+2. Run the initialize script
+```
+fin init
+```
