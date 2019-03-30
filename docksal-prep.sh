@@ -23,8 +23,8 @@ echo -e "${green_bg} Step 1 ${NC}${green} Updating packages...${NC}"
 export DEBIAN_FRONTEND=noninteractive
 
 # Update package info
-apt-get -y install apt-utils pv >/dev/null
 apt-get update >/dev/null
+apt-get -y install apt-utils >/dev/null
 
 # Upgrade packages
 echo -e "${green_bg} Step 2 ${NC}${green} Upgrading and applying security updates...${NC}"
@@ -37,7 +37,7 @@ apt-get -y install apt-transport-https ca-certificates gnupg2 software-propertie
 
 # Install Oh my ZSH
 echo -e "${green_bg} Step 3 ${NC}${green} Installing required packages (zsh, git, gcc, etc.)...${NC}"
-apt-get -y install curl zsh git p7zip-full tmux >/dev/null
+apt-get -y install curl zsh git p7zip-full tmux pv >/dev/null
 
 # LetsEncrypt Certbot
 echo -e "${green_bg} Step 4 ${NC}${green} Installing LetsEncrypt...${NC}"
