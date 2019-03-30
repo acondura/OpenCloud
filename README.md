@@ -8,12 +8,4 @@ An open source cloud management solution which uses:
 
 ## Installation
 
-1. Run the Docksal prep script
-```
-curl -fsSL https://raw.githubusercontent.com/acondura/OpenCloud/master/docksal-prep.sh | bash
-```
-
-2. Run the initialize script
-```
-fin init
-```
+To be added
