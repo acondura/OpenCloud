@@ -1,65 +1,33 @@
-# Docksal powered Drupal 8 Installation
+[![](https://www.drupal.org/files/styles/grid-3/public/project-images/Medium-Logo%20Color%20with%20padding.png)](http://www.drupal.org/project/varbase)
 
-This is a sample vanilla Drupal 8 installation pre-configured for use with Docksal.  
+[![Build Status](https://travis-ci.org/Vardot/varbase.svg?branch=8.x-6.6)](https://travis-ci.org/Vardot/varbase/builds/504091961) Varbase 8.6.6
 
-Features:
+# Varbase Project
 
-- Vanilla Drupal 8
-- `fin init` [example](.docksal/commands/init)
-- Using the [default](.docksal/docksal.env#L9) Docksal LAMP stack with [image version pinning](.docksal/docksal.env#L13-L15)
-- PHP and MySQL settings overrides [examples](.docksal/etc)
-- Drush aliases [example](drush/aliases.drushrc.php) (`drush @docksal status`)
-
-## Setup instructions
-
-### Step #1: Docksal environment setup
-
-**This is a one time setup - skip this if you already have a working Docksal environment.**  
-
-Follow [Docksal environment setup instructions](https://docs.docksal.io/en/master/getting-started/env-setup)
-
-### Step #2: Project setup
-
-1. Clone this repo into your Projects directory
-
-    ```
-    git clone https://github.com/docksal/drupal8.git drupal8
-    cd drupal8
-    ```
-
-2. Initialize the site
-
-    This will initialize local settings and install the site via drush
-
-    ```
-    fin init
-    ```
-
-3. Point your browser to
-
-    ```
-    http://drupal8.docksal
-    ```
-
-When the automated install is complete the command line output will display the admin username and password.
+Project template for [Varbase distribution](http://www.drupal.org/project/varbase).
 
 
-## More automation with 'fin init'
+## Create a Varbase project with [Composer](https://getcomposer.org/download/):
 
-Site provisioning can be automated using `fin init`, which calls the shell script in [.docksal/commands/init](.docksal/commands/init).  
-This script is meant to be modified per project. The one in this repo will give you a good starting example.
+To install the most recent stable release of Varbase 8.6.x run this command:
+```
+composer create-project Vardot/varbase-project:^8.6.6 PROJECT_DIR_NAME --no-dev --no-interaction
+```
 
-Some common tasks that can be handled by the init script (an other [custom commands](https://docs.docksal.io/en/master/fin/custom-commands/)):
+To install the dev version of Varbase 8.6.x run this command:
+```
+composer create-project vardot/varbase-project:8.6.x-dev PROJECT_DIR_NAME --stability dev --no-interaction
+```
 
-- initialize local settings files for Docker Compose, Drupal, Behat, etc.
-- import DB or perform a site install
-- compile Sass
-- run DB updates, revert features, clear caches, etc.
-- enable/disable modules, update variables values
+## [Create a new Vartheme sub theme for a project](https://github.com/Vardot/varbase/tree/8.x-6.x/scripts/README.md)
 
+## [Automated Functional Testing](https://github.com/Vardot/varbase/blob/8.x-6.x/tests/README.md)
 
-## Security notice
+## [Varbase Gherkin features](https://github.com/Vardot/varbase/blob/8.x-6.x/tests/features/varbase/README.md)
 
-This repo is intended for quick start demos and includes a hardcoded value for `hash_salt` in `settings.php`.  
-If you are basing your project code base on this repo, make sure you regenerate and update the `hash_salt` value.  
-A new value can be generated with `drush ev '$hash = Drupal\Component\Utility\Crypt::randomBytesBase64(55); print $hash . "\n";'` 
+## [Varbase 8.6.x Developer Guide](https://docs.varbase.vardot.com)
+
+## [CHANGELOG for Varbase](https://github.com/Vardot/varbase/blob/8.x-6.x/CHANGELOG.md)
+
+## [General instructions on how to update Varbase](https://github.com/Vardot/varbase/blob/8.x-6.x/UPDATE.md)
+

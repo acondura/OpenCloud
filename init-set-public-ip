@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+### Set up a public domain with nip.io which also facilitates LetsEncrypt SSL certificates.
+LOCAL_DOCKSAL=${PROJECT_ROOT}/.docksal/docksal-local.env
+rm -rf $LOCAL_DOCKSAL
+# Replace dots (.) with dashes (-) for SSL to work
+externalIP=$(curl -s -w '\n' api.ipify.org | sed 's/\./-/g')
+# Grab the project root directory
+cd ${PROJECT_ROOT}
+project=$(basename $PWD | sed 's/\./-/g')
+# Wildcard DNS 1
+# vhost1="$project-$externalIP.nip.io"
+# Wildcard DNS 2
+vhost1="$project.$externalIP.sslip.io"
+echo "VIRTUAL_HOST=$vhost1" > $LOCAL_DOCKSAL
+##################
+
+### Set the right drush alias corresponding to the public domain
+ALIASES_FILE=${PROJECT_ROOT}/drush/aliases.drushrc.php
+rm -rf $ALIASES_FILE
+
+if [ ! -d "${PROJECT_ROOT}/drush" ]; then
+  mkdir -p "${PROJECT_ROOT}/drush"
+fi
+
+echo "<?php" > $ALIASES_FILE
+echo "// @docksal Dev Drush alias" >> $ALIASES_FILE
+echo "\$aliases['dev'] = array(" >> $ALIASES_FILE
+echo "  'uri' => '$vhost1'," >> $ALIASES_FILE
+echo ");" >> $ALIASES_FILE
+##################
+
+fin p start

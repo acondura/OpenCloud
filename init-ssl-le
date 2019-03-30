@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+## Initialize stack and site (full reset)
+##
+## Usage: fin init
+
+# Abort if anything fails
+set -e
+
+#-------------------------- Helper functions --------------------------------
+
+# Console colors
+red='\033[0;31m'
+green='\033[0;32m'
+green_bg='\033[42m'
+yellow='\033[1;33m'
+NC='\033[0m'
+
+echo-red () { echo -e "${red}$1${NC}"; }
+echo-green () { echo -e "${green}$1${NC}"; }
+echo-green-bg () { echo -e "${green_bg}$1${NC}"; }
+echo-yellow () { echo -e "${yellow}$1${NC}"; }
+
+#-------------------------- Execution --------------------------------
+
+
+# If this is not a local server but one with a public IP AND public DOMAIN assigned,
+# then generate SSL certificates with LetsEncrypt.org
+if [ ${VIRTUAL_HOST} != *.docksal ]; then
+  if [ -f /usr/bin/certbot ]; then
+    if [ ! -f ~/.docksal/certs/${VIRTUAL_HOST}.crt ] && [ ! -f ~/.docksal/certs/${VIRTUAL_HOST}.key ]; then
+      sudo certbot certonly -n -d ${VIRTUAL_HOST} --webroot --webroot-path ${PROJECT_ROOT}/${DOCROOT}
+      sudo cp -r /etc/letsencrypt/archive/${VIRTUAL_HOST}/cert1.pem ~/.docksal/certs/${VIRTUAL_HOST}.crt
+      sudo cp -r /etc/letsencrypt/archive/${VIRTUAL_HOST}/privkey1.pem ~/.docksal/certs/${VIRTUAL_HOST}.key
+    else
+      sudo cp -r /etc/letsencrypt/archive/${VIRTUAL_HOST}/cert1.pem ~/.docksal/certs/${VIRTUAL_HOST}.crt
+      sudo cp -r /etc/letsencrypt/archive/${VIRTUAL_HOST}/privkey1.pem ~/.docksal/certs/${VIRTUAL_HOST}.key
+    fi
+
+    LOCAL_SETTINGS=${PROJECT_ROOT}/${DOCROOT}/sites/default/settings.local.php
+    chmod 755 ${PROJECT_ROOT}/${DOCROOT}/sites/default
+    if [ -f $LOCAL_SETTINGS ]; then
+      rm -rf $LOCAL_SETTINGS
+    fi
+    echo "<?php" > $LOCAL_SETTINGS
+    echo "\$base_url = 'https://${VIRTUAL_HOST}';" >> $LOCAL_SETTINGS
+
+    sudo chown -R docksal:docksal ~/.docksal/certs
+    echo-green "LetsEncrypt SSL certificates installed"
+  else
+    echo-yellow "Certbot NOT installed."
+  fi
+fi

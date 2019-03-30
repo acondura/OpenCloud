@@ -1,0 +1,203 @@
+#!/usr/bin/env bash
+
+## Initialize stack and site (full reset)
+##
+## Usage: fin init
+
+# Abort if anything fails
+set -e
+
+#-------------------------- Helper functions --------------------------------
+
+# Console colors
+red='\033[0;31m'
+green='\033[0;32m'
+green_bg='\033[42m'
+yellow='\033[1;33m'
+NC='\033[0m'
+
+echo-red () { echo -e "${red}$1${NC}"; }
+echo-green () { echo -e "${green}$1${NC}"; }
+echo-green-bg () { echo -e "${green_bg}$1${NC}"; }
+echo-yellow () { echo -e "${yellow}$1${NC}"; }
+
+#-------------------------- Execution --------------------------------
+
+if [ -z "$1" ]
+  then
+    echo "No argument supplied"
+    exit 1
+fi
+
+# Lowercase the branch name for consistency
+BRANCH=$(echo "$1" | tr '[:upper:]' '[:lower:]')
+
+SANDBOX_ROOT="/mnt/sandbox1"
+BRANCH_DIR="$SANDBOX_ROOT/$BRANCH"
+BRANCH_ROOT="$BRANCH_DIR/$BRANCH-site"
+BRANCH_SITE="$BRANCH-site"
+
+create_sandbox_user()
+{
+  if id "$BRANCH" >/dev/null 2>&1; then
+    echo-yellow "User $BRANCH exists, go to $BRANCH_DIR"
+  else
+    echo-green "Creating user '$BRANCH' using home: '$BRANCH_DIR'"
+    sudo adduser --disabled-password --gecos "" --shell /usr/bin/zsh --home $BRANCH_DIR $BRANCH > /dev/null
+  fi
+  sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR > /dev/null
+  # Make sure the SSH key is in place
+  sudo cp -rf /home/docksal/.ssh $BRANCH_DIR > /dev/null
+
+  sudo cp -rf /home/docksal/.SpaceVim $BRANCH_DIR > /dev/null
+  sudo cp -rf /home/docksal/.SpaceVim.d $BRANCH_DIR > /dev/null
+  sudo cp -rf /home/docksal/.oh-my-zsh $BRANCH_DIR > /dev/null
+  sudo cp -rf /home/docksal/.zshrc $BRANCH_DIR > /dev/null
+  sudo cp -rf /home/docksal/.profile $BRANCH_DIR > /dev/null
+  sudo ln -s $BRANCH_DIR/.SpaceVim $BRANCH_DIR/.vim
+  # sudo git clone https://github.com/Shougo/vimproc.vim.git > /dev/null
+
+  sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR > /dev/null
+}
+
+get_repo()
+{
+  sudo rm -rf $BRANCH_ROOT
+  GIT_REPO=$(git config --get remote.origin.url)
+  sudo runuser -l $BRANCH -c "cd $BRANCH_DIR; git clone $GIT_REPO $BRANCH_SITE"
+  sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git init" > /dev/null
+  sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git branch $BRANCH"
+  sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git checkout $BRANCH"
+  sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR > /dev/null
+}
+
+initialize_stack()
+{
+  cd $BRANCH_ROOT
+  sudo usermod -aG docker $BRANCH
+  sudo cp -rf /home/docksal/.docksal $BRANCH_DIR
+  sudo rm -rf $BRANCH_DIR/.docksal/alias
+  sudo mkdir $BRANCH_DIR/.docksal/alias
+  sudo chown -R $BRANCH:$BRANCH "$BRANCH_DIR/.docksal"
+  # Stack initialization
+  if [[ $DOCKER_RUNNING == "true" ]]; then
+    sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; fin reset -f"
+  else
+    sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; fin up"
+  fi
+  echo "Waiting 10s for MySQL to initialize...";
+  sleep 10
+}
+
+set_public_ip()
+{
+  ### Set up a public domain with nip.io which also facilitates LetsEncrypt SSL certificates.
+  LOCAL_DOCKSAL="$BRANCH_ROOT/.docksal/docksal-local.env"
+  sudo rm -rf $LOCAL_DOCKSAL
+  # Replace dots (.) with dashes (-) for SSL to work
+  externalIP=$(curl -s -w '\n' api.ipify.org | sed 's/\./-/g')
+  # Grab the project root directory name
+  project=$(echo $BRANCH_ROOT | rev | cut -d '/' -f1 | rev | sed 's/\./-/g')
+  # Wildcard DNS 1
+  vhost1="$project.$externalIP.sslip.io"
+  sudo runuser -l $BRANCH -c "echo \"VIRTUAL_HOST=$vhost1\" > $LOCAL_DOCKSAL"
+  ##################
+
+  ### Set the right drush alias corresponding to the public domain
+  ALIASES_FILE="$BRANCH_ROOT/drush/aliases.drushrc.php"
+  if [ -f $ALIASES_FILE ]; then
+    sudo rm -rf $ALIASES_FILE
+    sudo mkdir -p $BRANCH_ROOT/drush
+  fi
+
+  sudo runuser -l $BRANCH -c "echo \"<?php\" > $ALIASES_FILE"
+  sudo runuser -l $BRANCH -c "echo \"// @docksal Dev Drush alias\" >> $ALIASES_FILE"
+  sudo runuser -l $BRANCH -c "echo '\$aliases[\"dev\"] = array(' >> $ALIASES_FILE"
+  sudo runuser -l $BRANCH -c "echo \"  'uri' => '$vhost1',\" >> $ALIASES_FILE"
+  sudo runuser -l $BRANCH -c "echo \");\" >> $ALIASES_FILE"
+  ##################
+
+  sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; fin p start"
+  sudo mkdir "$BRANCH_ROOT/db"
+  cd ${PROJECT_ROOT}
+  sudo cp -rf "${PROJECT_ROOT}/db" "$BRANCH_ROOT"
+  sudo chown -R $BRANCH:$BRANCH "$BRANCH_ROOT/db"
+  echo-green "Importing database..."
+  sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; tar -zxvf $BRANCH_ROOT/db/*.gz"
+  sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; fin db import $BRANCH_ROOT/db/*.sql --progress"
+  sudo rm -rf "$BRANCH_ROOT/db/*.sql"
+}
+
+get_ssl() 
+{
+# If this is not a local server but one with a public IP AND public DOMAIN assigned,
+# then generate SSL certificates with LetsEncrypt.org
+
+  # Replace dots (.) with dashes (-) for SSL to work
+  externalIP=$(curl -s -w '\n' api.ipify.org | sed 's/\./-/g')
+  # Grab the project root directory name
+  project=$(echo $BRANCH_ROOT | rev | cut -d '/' -f1 | rev | sed 's/\./-/g')
+  # Wildcard DNS 1
+  vhost1="$project.$externalIP.sslip.io"
+
+  fin p start
+# By this point, VIRTUAL_HOST is set to the new domain name
+if [ $vhost1 != *.docksal ]; then
+  if [ -f /usr/bin/certbot ]; then
+    if [ ! -f "/home/docksal/.docksal/certs/$vhost1.crt" ] && [ ! -f "/home/docksal/.docksal/certs/$vhost1.key" ]; then
+      sudo certbot certonly -n -d $vhost1 --webroot --webroot-path "$BRANCH_ROOT/WWW/drupal"
+      sudo cp -r "/etc/letsencrypt/archive/$vhost1/cert1.pem" "$BRANCH_DIR/.docksal/certs/$vhost1.crt"
+      sudo cp -r "/etc/letsencrypt/archive/$vhost1/privkey1.pem" "$BRANCH_DIR/.docksal/certs/$vhost1.key"
+      sudo cp -r "/etc/letsencrypt/archive/$vhost1/cert1.pem" "/home/docksal/.docksal/certs/$vhost1.crt"
+      sudo cp -r "/etc/letsencrypt/archive/$vhost1/privkey1.pem" "/home/docksal/.docksal/certs/$vhost1.key"
+    else
+      sudo cp -r "/etc/letsencrypt/archive/$vhost1/cert1.pem" "$BRANCH_DIR/.docksal/certs/$vhost1.crt"
+      sudo cp -r "/etc/letsencrypt/archive/$vhost1/privkey1.pem" "$BRANCH_DIR/.docksal/certs/$vhost1.key"
+      sudo cp -r "/etc/letsencrypt/archive/$vhost1/cert1.pem" "/home/docksal/.docksal/certs/$vhost1.crt"
+      sudo cp -r "/etc/letsencrypt/archive/$vhost1/privkey1.pem" "/home/docksal/.docksal/certs/$vhost1.key"
+    fi
+    sudo chown -R docksal:docksal /home/docksal/.docksal
+    sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR/.docksal
+
+    LOCAL_SETTINGS="$BRANCH_ROOT/WWW/drupal/sites/default/settings.local.php"
+    DEFAULT_SETTINGS="$BRANCH_ROOT/WWW/drupal/sites/default/default.settings.php"
+    NEW_SETTINGS="$BRANCH_ROOT/WWW/drupal/sites/default/settings.php"
+
+    sudo chmod 755 "$BRANCH_ROOT/WWW/drupal/sites/default"
+    if [ -f $LOCAL_SETTINGS ]; then
+      sudo rm -rf $LOCAL_SETTINGS
+    fi
+    if [ ! -f $NEW_SETTINGS ]; then
+      sudo cp -r "${PROJECT_ROOT}/${DOCROOT}/sites/default/settings.php" $NEW_SETTINGS
+    fi
+    sudo runuser -l $BRANCH -c "echo \"<?php\" > $LOCAL_SETTINGS"
+    sudo runuser -l $BRANCH -c "echo '\$base_url = \"https://$vhost1\";' >> $LOCAL_SETTINGS"
+
+    sudo chown -R docksal:docksal "/home/docksal/.docksal/certs"
+    echo-green "LetsEncrypt SSL certificates installed"
+
+    sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; fin p start"
+    sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; fin uli"
+  else
+    echo-yellow "Certbot NOT installed."
+  fi
+fi
+}
+
+echo-green "1. Create sandbox user based on given branch: '$BRANCH'"
+create_sandbox_user
+
+echo-green "2. Get repository branch"
+get_repo
+
+echo-green "3. Initializing stack..."
+initialize_stack
+
+echo-green "4. Set public IP and domain for branch..."
+set_public_ip
+
+echo-green "5. Get SSL certificate..."
+get_ssl
+
+# Make sure everything is owned by the branch
+sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR

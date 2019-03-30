@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+## Initialize stack and site (full reset)
+##
+## Usage: fin init
+
+# Abort if anything fails
+set -e
+
+#-------------------------- Helper functions --------------------------------
+
+# Console colors
+red='\033[0;31m'
+green='\033[0;32m'
+green_bg='\033[42m'
+yellow='\033[1;33m'
+NC='\033[0m'
+
+echo-red () { echo -e "${red}$1${NC}"; }
+echo-green () { echo -e "${green}$1${NC}"; }
+echo-green-bg () { echo -e "${green_bg}$1${NC}"; }
+echo-yellow () { echo -e "${yellow}$1${NC}"; }
+
+#-------------------------- Execution --------------------------------
+
+echo-green "Going to project root"
+cd ${PROJECT_ROOT}
+
+echo-green "Updating composer.json file"
+fin composer varbase-refactor-composer composer.new.json docroot
+
+echo-green "Moving the new Composer file composer.new.json in place of the old one"
+mv composer.new.json composer.json
+
+echo-green "Executing Composer update to download updates to modules and libraries"
+fin composer update
+
+echo-green "Running database updates"
+cd ${PROJECT_ROOT}/${DOCROOT}
+fin drush -y updatedb
