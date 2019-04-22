@@ -62,7 +62,7 @@ create_project_user()
     # No interaction
     # ZSH shell for later use of "Oh My ZSH!"
     # Set user's home dir
-    sudo useradd --disabled-password --gecos "" --shell /usr/bin/zsh --home $USER_HOME $USER
+    sudo adduser --disabled-password --gecos "" --shell /usr/bin/zsh --home $USER_HOME $USER
     
     # Make sure the user's home is owned by the user
     echo-green " -Making sure the user's home is owned by the user"
