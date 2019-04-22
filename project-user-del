@@ -40,7 +40,7 @@ delete_project_user()
   # Check if user exists
   if id "$USER" >/dev/null 2>&1; then
     echo-green "Deleting '$USER'"
-    sudo userdel -fr $1 > /dev/null
+    sudo userdel -f -r $1 > /dev/null
   else
     echo-yellow "There's no user named '$USER'"
   fi
