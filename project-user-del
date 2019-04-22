@@ -40,7 +40,7 @@ delete_project_user()
   # Check if user exists
   if id "$USER" >/dev/null 2>&1; then
     echo-yellow "Deleting '$USER'"
-    sudo deluser --force --remove-home $1
+    sudo deluser --force --remove-all-files "$1"
   fi
 }
 

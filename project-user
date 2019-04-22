@@ -83,7 +83,7 @@ create_project_user()
 
     echo-green " -Installing Oh My ZSH!"
     OH_MY_ZSH=$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)
-    sudo runuser -l $USER -c "cd $USER_HOME; bash $OH_MY_ZSH"
+    sudo runuser -l $USER -c "cd $USER_HOME; bash -c $OH_MY_ZSH"
 
     echo-green " -Installing SpaceVIM"
     SPACEVIM=$(https://spacevim.org/install.sh)
