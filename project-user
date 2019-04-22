@@ -62,7 +62,7 @@ create_project_user()
       --gecos "" \ # No interaction
       --shell /usr/bin/zsh \ # ZSH shell for later use of "Oh My ZSH!"
       --home $USER_HOME \ # Set user's home dir
-      $USER > /dev/null # Don't display output
+      $USER
     
     # Make sure the user's home is owned by the user
     echo-green " -Making sure the user's home is owned by the user"
