@@ -70,32 +70,36 @@ create_project_user()
 
     # If the 'project' dir doesn't exist, create it
     USER_PROJECT="$USER_HOME/project"
-    USER_PROJ_SAND="$USER_HOME/project_sandboxes"
     if [ ! -d $USER_PROJECT ]; then
-      sudo runuser -l $USER -c "cd $USER_HOME; mkdir $USER_PROJECT"
+      sudo runuser -l $USER -c "cd $USER_HOME; mkdir $USER_PROJECT" > /dev/null
     fi
 
     # If the 'project_sandboxes' dir doesn't exist, create it
     USER_PROJ_SAND="$USER_HOME/project_sandboxes"
     if [ ! -d $USER_PROJ_SAND ]; then
-      sudo runuser -l $USER -c "cd $USER_HOME; mkdir $USER_PROJ_SAND"
+      sudo runuser -l $USER -c "cd $USER_HOME; mkdir $USER_PROJ_SAND" > /dev/null
     fi
 
     echo-green " -Installing Oh My ZSH!"
     OH_MY_ZSH="https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh"
-    sudo runuser -l $USER -c "cd $USER_HOME; curl -fsSL $OH_MY_ZSH | bash"
+    sudo runuser -l $USER -c "cd $USER_HOME; curl -fsSL $OH_MY_ZSH | bash" > /dev/null
 
     echo-green " -Installing SpaceVIM"
     SPACEVIM="https://spacevim.org/install.sh"
-    sudo runuser -l $USER -c "cd $USER_HOME; curl -sLf $SPACEVIM | bash"
+    sudo runuser -l $USER -c "cd $USER_HOME; curl -sLf $SPACEVIM | bash" > /dev/null
 
     # Point VIM to use SPACEVIM
     echo-green " -Making sure Vim uses SpaceVIM"
-    sudo ln -s $USER_HOME/.SpaceVim $USER_HOME/.vim
+    sudo ln -s $USER_HOME/.SpaceVim $USER_HOME/.vim > /dev/null
 
     echo-green " -Installing vimproc for interactive command execution in Vim"
     VIMPROC="https://github.com/Shougo/vimproc.vim.git"
     sudo runuser -l $USER -c "cd $USER_HOME; git clone $VIMPROC" > /dev/null
+
+    # If '.ssh' dir doesn't exist, create it
+    if [ ! -d "$USER_HOME/.ssh" ]; then
+      sudo runuser -l $USER -c "cd $USER_HOME; mkdir \"$USER_HOME/.ssh\"" > /dev/null
+    fi
 
     sudo chown -R $USER:$USER $USER_HOME > /dev/null
   fi
