@@ -1,0 +1,12 @@
+  datadog:
+    image: datadog/agent:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+    environment:
+      - DD_API_KEY
+      - DD_APM_ENABLED
+      - DD_TRACE_DEBUG
+      - DD_LOGS_ENABLED
+      - DD_APM_NON_LOCAL_TRAFFIC
