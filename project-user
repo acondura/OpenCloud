@@ -70,8 +70,16 @@ create_project_user()
 
     # If the 'project' dir doesn't exist, create it
     USER_PROJECT="$USER_HOME/project"
+    USER_PROJ_SAND="$USER_HOME/project_sandboxes"
     if [ ! -d $USER_PROJECT ]; then
-      mkdir $USER_PROJECT
+      sudo runuser -l $USER -c "cd $USER_HOME; mkdir $USER_PROJECT"
+      sudo runuser -l $USER -c "cd $USER_HOME; mkdir $USER_PROJ_SAND"
+    fi
+
+    # If the 'project_sandboxes' dir doesn't exist, create it
+    USER_PROJ_SAND="$USER_HOME/project_sandboxes"
+    if [ ! -d $USER_PROJ_SAND ]; then
+      sudo runuser -l $USER -c "cd $USER_HOME; mkdir $USER_PROJ_SAND"
     fi
 
     echo-green " -Installing Oh My ZSH!"
