@@ -1,0 +1,7 @@
+# Hooks
+datadog.pre-install
+datadog.post-install
+datadog.pre-uninstall
+
+# Container config
+conf/datadog.yml

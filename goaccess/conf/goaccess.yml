@@ -1,0 +1,8 @@
+  goaccess:
+    hostname: goaccess
+    image: allinurl/goaccess
+    volumes:
+      - ${PROJECT_ROOT}/goaccess/data:/srv/data:rw
+      - ${PROJECT_ROOT}/goaccess/html:/srv/report:rw
+    labels:
+      - io.docksal.virtual-host=goaccess.${VIRTUAL_HOST}

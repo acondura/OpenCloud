@@ -1,0 +1,7 @@
+# Hooks
+goaccess.pre-install
+goaccess.post-install
+goaccess.pre-uninstall
+
+# Container config
+conf/goaccess.yml

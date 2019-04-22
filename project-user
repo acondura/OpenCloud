@@ -1,0 +1,97 @@
+#!/usr/bin/env bash
+
+## Initialize stack and site (full reset)
+##
+## Usage: fin init
+
+# Abort if anything fails
+set -e
+
+#-------------------------- Helper functions --------------------------------
+
+# Console colors
+red='\033[0;31m'
+green='\033[0;32m'
+green_bg='\033[42m'
+yellow='\033[1;33m'
+NC='\033[0m'
+
+echo-red () { echo -e "${red}$1${NC}"; }
+echo-green () { echo -e "${green}$1${NC}"; }
+echo-green-bg () { echo -e "${green_bg}$1${NC}"; }
+echo-yellow () { echo -e "${yellow}$1${NC}"; }
+
+#-------------------------- Execution --------------------------------
+
+if [ -z "$1" ]
+  then
+    echo "No project user supplied"
+    echo ""
+    echo "--Example: ./project-user USER_NAME HOME_DIR"
+    echo ""
+    echo "  HOME_DIR is optional, you can use it to set a custom home dir, e.g /mnt/sandbox (Please make sure your HDD/SSD drive is mounted). By default it uses the /home dir. Useful in cases where the root partition is small (e.g. 50GB) and the mounted drive is larger (e.g. 250GB)."
+    echo ""
+    exit 1
+fi
+
+# Lowercase the branch name for consistency
+USER=$(echo "$1" | tr '[:upper:]' '[:lower:]')
+
+# If a home dir path was supplied
+if [ $# -eq 2 ]; then
+  # If that path exists
+  if [ -d "$2" ]; then
+    ROOT_HOME_DIR="$2"
+  fi
+else
+    ROOT_HOME_DIR="/home"
+fi
+
+# The user's home dir
+USER_HOME="$ROOT_HOME_DIR/$USER"
+
+# If the 'project' dir doesn't exist, create it
+USER_PROJECT="$USER_HOME/project"
+if [ ! -d $USER_PROJECT ]; then
+  mkdir $USER_PROJECT
+fi
+
+create_project_user()
+{
+  # Check if user exists
+  if id "$USER" >/dev/null 2>&1; then
+    echo-yellow "User '$USER' exists, go to $USER_HOME"
+  else
+    echo-green " -Creating user '$USER' using home: '$USER_HOME'"
+    sudo adduser \
+      --disabled-password \ # No password, we're using SSH keys
+      --gecos "" \ # No interaction
+      --shell /usr/bin/zsh \ # ZSH shell for later use of "Oh My ZSH!"
+      --home $USER_HOME \ # Set user's home dir
+      $USER > /dev/null # Don't display output
+    
+    # Make sure the user's home is owned by the user
+    echo-green " -Making sure the user's home is owned by the user"
+    sudo chown -R $USER:$USER $USER_HOME > /dev/null
+
+    echo-green " -Installing Oh My ZSH!"
+    OH_MY_ZSH=$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)
+    sudo runuser -l $USER -c "cd $USER_HOME; bash $OH_MY_ZSH"
+
+    echo-green " -Installing SpaceVIM"
+    SPACEVIM=$(https://spacevim.org/install.sh)
+    sudo runuser -l $USER -c "cd $USER_HOME; curl -sLf $SPACEVIM | bash"
+
+    # Point VIM to use SPACEVIM
+    echo-green " -Making sure Vim uses SpaceVIM"
+    sudo ln -s $USER_HOME/.SpaceVim $USER_HOME/.vim
+
+    echo-green " -Installing vimproc for interactive command execution in Vim"
+    VIMPROC="https://github.com/Shougo/vimproc.vim.git"
+    sudo runuser -l $USER -c "cd $USER_HOME; git clone $VIMPROC" > /dev/null
+
+    sudo chown -R $USER:$USER $USER_HOME > /dev/null
+  fi
+}
+
+create_project_user
