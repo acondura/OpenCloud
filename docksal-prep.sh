@@ -37,7 +37,7 @@ apt-get -y install apt-transport-https ca-certificates gnupg2 software-propertie
 
 # Install Oh my ZSH
 echo -e "${green_bg} Step 3 ${NC}${green} Installing required packages (zsh, git, gcc, etc.)...${NC}"
-apt-get -y install curl zsh git p7zip-full tmux pv parallel sendmail-bin sendmail >/dev/null
+apt-get -y install curl zsh git p7zip-full tmux pv parallel unzip >/dev/null
 
 # LetsEncrypt Certbot
 echo -e "${green_bg} Step 4 ${NC}${green} Installing LetsEncrypt...${NC}"

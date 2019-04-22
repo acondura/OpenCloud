@@ -50,12 +50,6 @@ fi
 # The user's home dir
 USER_HOME="$ROOT_HOME_DIR/$USER"
 
-# If the 'project' dir doesn't exist, create it
-USER_PROJECT="$USER_HOME/project"
-if [ ! -d $USER_PROJECT ]; then
-  mkdir $USER_PROJECT
-fi
-
 create_project_user()
 {
   # Check if user exists
@@ -73,6 +67,12 @@ create_project_user()
     # Make sure the user's home is owned by the user
     echo-green " -Making sure the user's home is owned by the user"
     sudo chown -R $USER:$USER $USER_HOME > /dev/null
+
+    # If the 'project' dir doesn't exist, create it
+    USER_PROJECT="$USER_HOME/project"
+    if [ ! -d $USER_PROJECT ]; then
+      mkdir $USER_PROJECT
+    fi
 
     echo-green " -Installing Oh My ZSH!"
     OH_MY_ZSH=$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)
