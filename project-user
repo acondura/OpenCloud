@@ -101,7 +101,8 @@ create_project_user()
       sudo runuser -l $USER -c "cd $USER_HOME; mkdir \"$USER_HOME/.ssh\"" > /dev/null
     fi
 
-    sudo cp -r "/home/docksal/.docksal" $1
+    sudo cp -r "/home/docksal/.docksal" $USER_HOME
+    sudo rm -rf "$USER_HOME/.docksal/certs/*"
 
     sudo chown -R $USER:$USER $USER_HOME > /dev/null
   fi
