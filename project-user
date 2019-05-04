@@ -106,6 +106,8 @@ create_project_user()
 
     sudo chown -R $USER:$USER $USER_HOME > /dev/null
 
+    sudo adduser $USER docker
+
     echo-green " -Please make sure you add a public key at $USER_HOME/.ssh/authorized_keys"
     echo-green " -You can then login with $USER@wd1.condurachi.ro"
   fi
