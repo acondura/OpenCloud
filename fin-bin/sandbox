@@ -66,10 +66,10 @@ get_repo()
   sudo rm -rf $BRANCH_ROOT
   # sudo runuser -l $BRANCH -c "cd $BRANCH_DIR; git clone $GIT_REPO $BRANCH_ROOT"
   sudo GIT_SSH_COMMAND="ssh -i /home/docksal/.ssh/id_rsa" git clone $GIT_REPO $BRANCH_ROOT
+  sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR > /dev/null
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git init" > /dev/null
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git branch $BRANCH"
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git checkout $BRANCH"
-  sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR > /dev/null
 }
 
 initialize_stack()
