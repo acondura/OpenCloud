@@ -50,3 +50,4 @@ delete_project_user()
 }
 
 delete_project_user
+sudo fin cleanup
