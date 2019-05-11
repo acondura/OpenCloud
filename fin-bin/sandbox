@@ -46,7 +46,7 @@ create_sandbox_user()
     echo-green "Creating user '$BRANCH' using home: '$BRANCH_DIR'"
     sudo adduser --disabled-password --gecos "" --shell /usr/bin/zsh --home $BRANCH_DIR $BRANCH > /dev/null
   fi
-  sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR > /dev/null
+
   # Make sure the SSH key is in place
   if [ ! -d "$BRANCH_DIR/.ssh" ]; then
     sudo mkdir "$BRANCH_DIR/.ssh"
