@@ -34,8 +34,9 @@ BRANCH=$(echo "$1" | tr '[:upper:]' '[:lower:]')
 
 SANDBOX_ROOT="/mnt/sandbox1"
 BRANCH_DIR="$SANDBOX_ROOT/$BRANCH"
-BRANCH_ROOT="$BRANCH_DIR/$BRANCH/project/$BRANCH"
-BRANCH_SITE=$BRANCH_ROOT
+GIT_REPO=$(git config --get remote.origin.url)
+BRANCH_SITE=$(basename $GIT_REPO | sed 's/\.git//g')
+BRANCH_ROOT="$BRANCH_DIR/$BRANCH/project/$BRANCH_SITE"
 
 create_sandbox_user()
 {
@@ -63,8 +64,7 @@ create_sandbox_user()
 get_repo()
 {
   sudo rm -rf $BRANCH_ROOT
-  GIT_REPO=$(git config --get remote.origin.url)
-  sudo runuser -l $BRANCH -c "cd $BRANCH_DIR; git clone $GIT_REPO $BRANCH_SITE"
+  sudo runuser -l $BRANCH -c "cd $BRANCH_DIR; git clone $GIT_REPO $BRANCH_ROOT"
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git init" > /dev/null
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git branch $BRANCH"
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git checkout $BRANCH"
