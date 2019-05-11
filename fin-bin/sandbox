@@ -34,8 +34,8 @@ BRANCH=$(echo "$1" | tr '[:upper:]' '[:lower:]')
 
 SANDBOX_ROOT="/mnt/sandbox1"
 BRANCH_DIR="$SANDBOX_ROOT/$BRANCH"
-BRANCH_ROOT="$BRANCH_DIR/$BRANCH-site"
-BRANCH_SITE="$BRANCH-site"
+BRANCH_ROOT="$BRANCH_DIR/$BRANCH/project/$BRANCH"
+BRANCH_SITE=$BRANCH_ROOT
 
 create_sandbox_user()
 {
@@ -47,7 +47,7 @@ create_sandbox_user()
   fi
   sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR > /dev/null
   # Make sure the SSH key is in place
-  sudo cp -rf /home/docksal/.ssh $BRANCH_DIR > /dev/null
+  sudo cp -rf /home/docksal/.ssh/authorized_keys "$BRANCH_DIR/.ssh" > /dev/null
 
   sudo cp -rf /home/docksal/.SpaceVim $BRANCH_DIR > /dev/null
   sudo cp -rf /home/docksal/.SpaceVim.d $BRANCH_DIR > /dev/null
@@ -94,13 +94,11 @@ set_public_ip()
   ### Set up a public domain with nip.io which also facilitates LetsEncrypt SSL certificates.
   LOCAL_DOCKSAL="$BRANCH_ROOT/.docksal/docksal-local.env"
   sudo rm -rf $LOCAL_DOCKSAL
-  # Replace dots (.) with dashes (-) for SSL to work
-  externalIP=$(curl -s -w '\n' api.ipify.org | sed 's/\./-/g')
   # Grab the project root directory name
-  project=$(echo $BRANCH_ROOT | rev | cut -d '/' -f1 | rev | sed 's/\./-/g')
+  project=$(basename $BRANCH_ROOT | sed 's/\./-/g')
   # Wildcard DNS 1
-  vhost1="$project.$externalIP.sslip.io"
-  sudo runuser -l $BRANCH -c "echo \"VIRTUAL_HOST=$vhost1\" > $LOCAL_DOCKSAL"
+  vhost="$project.wd1.condurachi.ro"
+  sudo runuser -l $BRANCH -c "echo \"VIRTUAL_HOST=$vhost\" > $LOCAL_DOCKSAL"
   ##################
 
   ### Set the right drush alias corresponding to the public domain
@@ -113,7 +111,7 @@ set_public_ip()
   sudo runuser -l $BRANCH -c "echo \"<?php\" > $ALIASES_FILE"
   sudo runuser -l $BRANCH -c "echo \"// @docksal Dev Drush alias\" >> $ALIASES_FILE"
   sudo runuser -l $BRANCH -c "echo '\$aliases[\"dev\"] = array(' >> $ALIASES_FILE"
-  sudo runuser -l $BRANCH -c "echo \"  'uri' => '$vhost1',\" >> $ALIASES_FILE"
+  sudo runuser -l $BRANCH -c "echo \"  'uri' => '$vhost',\" >> $ALIASES_FILE"
   sudo runuser -l $BRANCH -c "echo \");\" >> $ALIASES_FILE"
   ##################
 
@@ -133,47 +131,37 @@ get_ssl()
 # If this is not a local server but one with a public IP AND public DOMAIN assigned,
 # then generate SSL certificates with LetsEncrypt.org
 
-  # Replace dots (.) with dashes (-) for SSL to work
-  externalIP=$(curl -s -w '\n' api.ipify.org | sed 's/\./-/g')
   # Grab the project root directory name
-  project=$(echo $BRANCH_ROOT | rev | cut -d '/' -f1 | rev | sed 's/\./-/g')
+  project=$(basename $BRANCH_ROOT | sed 's/\./-/g')
   # Wildcard DNS 1
-  vhost1="$project.$externalIP.sslip.io"
+  vhost="$project.wd1.condurachi.ro"
 
   fin p start
+
 # By this point, VIRTUAL_HOST is set to the new domain name
-if [ $vhost1 != *.docksal ]; then
+if [ $vhost != *.docksal ]; then
   if [ -f /usr/bin/certbot ]; then
-    if [ ! -f "/home/docksal/.docksal/certs/$vhost1.crt" ] && [ ! -f "/home/docksal/.docksal/certs/$vhost1.key" ]; then
-      sudo certbot certonly -n -d $vhost1 --webroot --webroot-path "$BRANCH_ROOT/WWW/drupal"
-      sudo cp -r "/etc/letsencrypt/archive/$vhost1/cert1.pem" "$BRANCH_DIR/.docksal/certs/$vhost1.crt"
-      sudo cp -r "/etc/letsencrypt/archive/$vhost1/privkey1.pem" "$BRANCH_DIR/.docksal/certs/$vhost1.key"
-      sudo cp -r "/etc/letsencrypt/archive/$vhost1/cert1.pem" "/home/docksal/.docksal/certs/$vhost1.crt"
-      sudo cp -r "/etc/letsencrypt/archive/$vhost1/privkey1.pem" "/home/docksal/.docksal/certs/$vhost1.key"
-    else
-      sudo cp -r "/etc/letsencrypt/archive/$vhost1/cert1.pem" "$BRANCH_DIR/.docksal/certs/$vhost1.crt"
-      sudo cp -r "/etc/letsencrypt/archive/$vhost1/privkey1.pem" "$BRANCH_DIR/.docksal/certs/$vhost1.key"
-      sudo cp -r "/etc/letsencrypt/archive/$vhost1/cert1.pem" "/home/docksal/.docksal/certs/$vhost1.crt"
-      sudo cp -r "/etc/letsencrypt/archive/$vhost1/privkey1.pem" "/home/docksal/.docksal/certs/$vhost1.key"
-    fi
-    sudo chown -R docksal:docksal /home/docksal/.docksal
+    cp -r "$BRANCH_DIR/.docksal/certs/wd1.condurachi.ro.crt" "$BRANCH_DIR/.docksal/certs/$vhost.crt"
+    cp -r "$BRANCH_DIR/.docksal/certs/wd1.condurachi.ro.key" "$BRANCH_DIR/.docksal/certs/$vhost.key"
     sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR/.docksal
 
-    LOCAL_SETTINGS="$BRANCH_ROOT/WWW/drupal/sites/default/settings.local.php"
-    DEFAULT_SETTINGS="$BRANCH_ROOT/WWW/drupal/sites/default/default.settings.php"
-    NEW_SETTINGS="$BRANCH_ROOT/WWW/drupal/sites/default/settings.php"
+    LOCAL_SETTINGS="$BRANCH_ROOT/${DOCROOT}/sites/default/settings.local.php"
+    DEFAULT_SETTINGS="$BRANCH_ROOT/${DOCROOT}/sites/default/default.settings.php"
+    NEW_SETTINGS="$BRANCH_ROOT/${DOCROOT}/sites/default/settings.php"
 
-    sudo chmod 755 "$BRANCH_ROOT/WWW/drupal/sites/default"
-    if [ -f $LOCAL_SETTINGS ]; then
-      sudo rm -rf $LOCAL_SETTINGS
-    fi
+    # Make sure sites/default is writable
+    sudo chmod 755 "$BRANCH_ROOT/${DOCROOT}/sites/default"
+    # If settings.php doesn't exist, create it
     if [ ! -f $NEW_SETTINGS ]; then
-      sudo cp -r "${PROJECT_ROOT}/${DOCROOT}/sites/default/settings.php" $NEW_SETTINGS
+      sudo cp -r $DEFAULT_SETTINGS $NEW_SETTINGS
     fi
-    sudo runuser -l $BRANCH -c "echo \"<?php\" > $LOCAL_SETTINGS"
-    sudo runuser -l $BRANCH -c "echo '\$base_url = \"https://$vhost1\";' >> $LOCAL_SETTINGS"
+    # If settings.local.php doesn't exist, create it
+    if [ ! -f $LOCAL_SETTINGS ]; then
+      sudo rm -rf $LOCAL_SETTINGS
+      sudo runuser -l $BRANCH -c "echo \"<?php\" > $LOCAL_SETTINGS"
+      sudo runuser -l $BRANCH -c "echo '\$base_url = \"https://$vhost\";' >> $LOCAL_SETTINGS"
+    fi
 
-    sudo chown -R docksal:docksal "/home/docksal/.docksal/certs"
     echo-green "LetsEncrypt SSL certificates installed"
 
     sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; fin p start"
