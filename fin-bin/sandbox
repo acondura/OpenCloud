@@ -178,18 +178,23 @@ if [ $vhost != *.docksal ]; then
 fi
 }
 
+echo ""
 echo-green "1. Create sandbox user based on given branch: '$BRANCH'"
 create_sandbox_user
 
+echo ""
 echo-green "2. Get repository branch"
 get_repo
 
+echo ""
 echo-green "3. Initializing stack..."
 initialize_stack
 
+echo ""
 echo-green "4. Set public IP and domain for branch..."
 set_public_ip
 
+echo ""
 echo-green "5. Get SSL certificate..."
 get_ssl
 
