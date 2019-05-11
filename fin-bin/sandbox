@@ -47,6 +47,7 @@ create_sandbox_user()
   fi
   sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR > /dev/null
   # Make sure the SSH key is in place
+  sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; ssh-keygen -t rsa -b 4096 -N "" -f id_rsa.key"
   sudo cp -rf /home/docksal/.ssh/authorized_keys "$BRANCH_DIR/.ssh" > /dev/null
 
   sudo cp -rf /home/docksal/.SpaceVim $BRANCH_DIR > /dev/null
