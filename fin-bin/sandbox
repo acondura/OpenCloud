@@ -147,8 +147,8 @@ get_ssl()
 if [ $vhost != *.docksal ]; then
   if [ -f /usr/bin/certbot ]; then
     # Wildcard DNS
-    cp -r "$BRANCH_DIR/.docksal/certs/wd1.condurachi.ro.crt" "$BRANCH_DIR/.docksal/certs/$vhost.crt"
-    cp -r "$BRANCH_DIR/.docksal/certs/wd1.condurachi.ro.key" "$BRANCH_DIR/.docksal/certs/$vhost.key"
+    sudo cp -r "$BRANCH_DIR/.docksal/certs/wd1.condurachi.ro.crt" "$BRANCH_DIR/.docksal/certs/$vhost.crt"
+    sudo cp -r "$BRANCH_DIR/.docksal/certs/wd1.condurachi.ro.key" "$BRANCH_DIR/.docksal/certs/$vhost.key"
     sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR/.docksal
 
     LOCAL_SETTINGS="$BRANCH_ROOT/${DOCROOT}/sites/default/settings.local.php"
