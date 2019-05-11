@@ -51,7 +51,7 @@ create_sandbox_user()
     sudo mkdir "$BRANCH_DIR/.ssh"
   fi
   sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR > /dev/null
-  sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; ssh-keygen -t rsa -b 4096 -N '' -f id_rsa.key"
+  sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; ssh-keygen -t rsa -b 4096 -N '' -f .ssh/id_rsa.key"
   sudo cp -rf /home/docksal/.ssh/authorized_keys $BRANCH_DIR/.ssh > /dev/null
   sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR > /dev/null
 
