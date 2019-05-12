@@ -153,7 +153,7 @@ if [ $vhost != *.docksal ]; then
     sudo cp -r "$BRANCH_DIR/.docksal/certs/wd1.condurachi.ro.key" "$BRANCH_DIR/.docksal/certs/$vhost.key"
     sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR/.docksal
 
-    DOCROOT=$(sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; fin exec 'echo $DOCROOT'")
+    DOCROOT=$(cd $BRANCH_ROOT; fin exec 'echo $DOCROOT')
     sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; fin p start"
     LOCAL_SETTINGS="$BRANCH_ROOT/$DOCROOT/sites/default/settings.local.php"
 
