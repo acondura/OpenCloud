@@ -162,6 +162,9 @@ if [ $vhost != *.docksal ]; then
     # DOCROOT=$(cd $BRANCH_ROOT; fin exec 'echo $DOCROOT' | sed 's/\\r//g')
     sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; fin p start"
     LOCAL_SETTINGS="$BRANCH_ROOT/docroot/sites/default/settings.local.php"
+    
+    sudo cp -r docroot/sites/default/files/* $BRANCH_ROOT/docroot/sites/default/files
+    sudo chown -R $BRANCH $BRANCH_ROOT
 
     # Make sure sites/default is writable
     sudo chmod 755 "$BRANCH_ROOT/docroot/sites/default"
