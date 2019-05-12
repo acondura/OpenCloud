@@ -23,7 +23,7 @@ echo-yellow () { echo -e "${yellow}$1${NC}"; }
 
 #-------------------------- Execution --------------------------------
 
-if [ ! -d .docksal ]; then
+if [ ! -d ".docksal" ]; then
   echo-red "Cannot detect project root. Please make sure you run the sandbox command from a Dockal project's root folder."
   exit 1
 fi
@@ -158,7 +158,7 @@ if [ $vhost != *.docksal ]; then
     sudo cp -r "$BRANCH_DIR/.docksal/certs/wd1.condurachi.ro.key" "$BRANCH_DIR/.docksal/certs/$vhost.key"
     sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR/.docksal
 
-    DOCROOT=$(cd $BRANCH_ROOT; fin exec 'echo $DOCROOT')
+    DOCROOT=$(cd $BRANCH_ROOT; fin exec 'echo $DOCROOT' | sed 's/\\r//g')
     sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; fin p start"
     LOCAL_SETTINGS="$BRANCH_ROOT/$DOCROOT/sites/default/settings.local.php"
 
