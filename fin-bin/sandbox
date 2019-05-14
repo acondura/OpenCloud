@@ -67,6 +67,7 @@ create_sandbox_user()
   sudo cp -rf /home/docksal/.SpaceVim.d $BRANCH_DIR > /dev/null
   sudo cp -rf /home/docksal/.oh-my-zsh $BRANCH_DIR > /dev/null
   sudo cp -rf /home/docksal/.zshrc $BRANCH_DIR > /dev/null
+  sudo sed -i 's/\/home\/docksal/\$HOME/g' $BRANCH_DIR/.zshrc
   sudo cp -rf /home/docksal/.profile $BRANCH_DIR > /dev/null
   sudo ln -s $BRANCH_DIR/.SpaceVim $BRANCH_DIR/.vim
   # sudo git clone https://github.com/Shougo/vimproc.vim.git > /dev/null
