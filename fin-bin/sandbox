@@ -163,7 +163,7 @@ if [ $vhost != *.docksal ]; then
     sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; fin p start"
     LOCAL_SETTINGS="$BRANCH_ROOT/$DOCROOT/sites/default/settings.local.php"
     
-    sudo cp -r $DOCROOT/sites/default/files/* $BRANCH_ROOT/$DOCROOT/sites/default/files
+    sudo cp -r $DOCROOT/sites/default/files $BRANCH_ROOT/$DOCROOT/sites/default
     sudo chown -R $BRANCH $BRANCH_ROOT
 
     # Make sure sites/default is writable
