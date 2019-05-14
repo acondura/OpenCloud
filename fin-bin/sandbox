@@ -159,15 +159,15 @@ if [ $vhost != *.docksal ]; then
     sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR/.docksal
 
     # Fix DOCROOT variable, hardcoding for now
-    # DOCROOT=$(cd $BRANCH_ROOT; fin exec 'echo $DOCROOT' | sed 's/\\r//g')
+    DOCROOT=$(cd $BRANCH_ROOT; fin exec 'echo -n $DOCROOT')
     sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; fin p start"
-    LOCAL_SETTINGS="$BRANCH_ROOT/docroot/sites/default/settings.local.php"
+    LOCAL_SETTINGS="$BRANCH_ROOT/$DOCROOT/sites/default/settings.local.php"
     
-    sudo cp -r docroot/sites/default/files/* $BRANCH_ROOT/docroot/sites/default/files
+    sudo cp -r $DOCROOT/sites/default/files/* $BRANCH_ROOT/$DOCROOT/sites/default/files
     sudo chown -R $BRANCH $BRANCH_ROOT
 
     # Make sure sites/default is writable
-    sudo chmod 755 "$BRANCH_ROOT/docroot/sites/default"
+    sudo chmod 755 "$BRANCH_ROOT/$DOCROOT/sites/default"
 
     # If settings.local.php doesn't exist, create it
     if [ ! -f $LOCAL_SETTINGS ]; then
