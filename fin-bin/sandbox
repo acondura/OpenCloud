@@ -131,9 +131,8 @@ set_public_ip()
   ##################
 
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; fin p start"
-  cd $PROJECT_ROOT/docroot
-  fin db dump db/dump.sql
   cd $PROJECT_ROOT
+  sudo fin db dump db/dump.sql
   sudo cp -rf "$PROJECT_ROOT/db" "$BRANCH_ROOT"
   sudo chown -R $BRANCH:$BRANCH "$BRANCH_ROOT/db"
   echo-green "Importing database..."
