@@ -112,7 +112,9 @@ set_public_ip()
   # Grab the project root directory name
   project=$(basename $BRANCH_ROOT | sed 's/\./-/g')
   # Wildcard DNS 1
-  vhost="$project.wd1.condurachi.ro"
+  # vhost="$project.wd1.condurachi.ro"
+  customDomain="gtacty.co"
+  vhost="$project.$customDomain"
   sudo runuser -l $BRANCH -c "echo \"VIRTUAL_HOST=$vhost\" > $LOCAL_DOCKSAL"
   ##################
 
@@ -148,7 +150,8 @@ get_ssl()
   # Grab the project root directory name
   project=$(basename $BRANCH_ROOT | sed 's/\./-/g')
   # Wildcard DNS 1
-  vhost="$project.wd1.condurachi.ro"
+  customDomain="gtacty.co"
+  vhost="$project.$customDomain"
 
   fin p start
 
@@ -156,8 +159,8 @@ get_ssl()
 if [ $vhost != *.docksal ]; then
   if [ -f /usr/bin/certbot ]; then
     # Wildcard DNS
-    sudo cp -r "$BRANCH_DIR/.docksal/certs/wd1.condurachi.ro.crt" "$BRANCH_DIR/.docksal/certs/$vhost.crt"
-    sudo cp -r "$BRANCH_DIR/.docksal/certs/wd1.condurachi.ro.key" "$BRANCH_DIR/.docksal/certs/$vhost.key"
+    sudo cp -r "$BRANCH_DIR/.docksal/certs/$customDomain.crt" "$BRANCH_DIR/.docksal/certs/$vhost.crt"
+    sudo cp -r "$BRANCH_DIR/.docksal/certs/$customDomain.key" "$BRANCH_DIR/.docksal/certs/$vhost.key"
     sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR/.docksal
 
     # Fix DOCROOT variable, hardcoding for now
