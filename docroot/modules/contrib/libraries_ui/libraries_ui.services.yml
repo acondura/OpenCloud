@@ -1,5 +1,0 @@
-services:
-  libraries_ui.default:
-    class: 'Drupal\libraries_ui\LibrariesUiService'
-    arguments: []
-

@@ -1,5 +1,0 @@
-services:
-  betterlogin_event_subscriber:
-    class: Drupal\betterlogin\EventSubscriber\BetterLoginSubscriber
-    tags:
-      - {name: event_subscriber}

@@ -1,7 +1,0 @@
-libraries_ui.librares_ui_controller_librariesui:
-  path: '/admin/config/media/libraries_ui'
-  defaults:
-    _controller: '\Drupal\libraries_ui\Controller\LibraresUiController::librariesui'
-    _title: 'Libraries UI'
-  requirements:
-    _permission: 'access content'
