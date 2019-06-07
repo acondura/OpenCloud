@@ -173,11 +173,16 @@ else
   # chown -R docksal:docksal /home/docksal/.SpaceVim.d
 
   # Install Docksal
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-  apt-get update -qq
-  apt-get install -y -qq --allow-downgrades --no-install-recommends docker-ce-cli=5:18.09.2~3-0~ubuntu-bionic
-  apt-get install -y -qq --allow-downgrades --no-install-recommends docker-ce=5:18.09.2~3-0~ubuntu-bionic
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - >/dev/null
+
+  add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" >/dev/null
+
+  apt-get update -qq >/dev/null
+
+  apt-get install -y -qq --allow-downgrades --no-install-recommends docker-ce-cli=5:18.09.2~3-0~ubuntu-bionic >/dev/null
+
+  apt-get install -y -qq --allow-downgrades --no-install-recommends docker-ce=5:18.09.2~3-0~ubuntu-bionic >/dev/null
+
   echo -e "${green_bg} Step 11 ${NC}${green} Installing Docksal...${NC}"
   runuser -l docksal -c 'curl -fsSL get.docksal.io | zsh' >/dev/null
   usermod -aG docker docksal
