@@ -38,7 +38,7 @@ fi
 USER=$(echo "$1" | tr '[:upper:]' '[:lower:]')
 
 # Default value
-ROOT_HOME_DIR="/mnt/sandbox1"
+ROOT_HOME_DIR="/home"
 # If a home dir path was supplied
 if [ $# -eq 2 ]; then
   # If that path exists
