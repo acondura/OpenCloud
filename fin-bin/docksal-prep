@@ -27,7 +27,7 @@ apt-get update >/dev/null
 apt-get -y install apt-utils >/dev/null
 
 # Upgrade packages
-echo -e "${green_bg} Step 2 ${NC}${green} Upgrading and applying security updates...${NC}"
+# echo -e "${green_bg} Step 2 ${NC}${green} Upgrading and applying security updates...${NC}"
 # apt-get -y upgrade >/dev/null
 # This makes sure that ALL security updates are applied
 # unattended-upgrade -d >/dev/null
@@ -57,7 +57,7 @@ else
   # Add docksal as a sudo group with no password
   echo "docksal ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
   # Create the docksal user
-  adduser --disabled-password --gecos "" --shell /usr/bin/zsh docksal
+  adduser --disabled-password --gecos "" --shell /bin/bash docksal
   # Assign the docksal group to the user
   usermod -aG docksal docksal
   # Make sure the SSH key is in place
@@ -174,7 +174,10 @@ else
   # chown -R docksal:docksal /home/docksal/.SpaceVim.d
 
   # Install Docksal
-  # apt-get install -y docker-ce-cli
+  echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" > /etc/apt/sources.list.d/docker.list
+  apt-get update -qq
+  apt-get install -y -qq --allow-downgrades --no-install-recommends docker-ce-cli=5:18.09.2~3-0~ubuntu-bionic
+  apt-get install -y -qq --allow-downgrades --no-install-recommends docker-ce=5:18.09.2~3-0~ubuntu-bionic
   echo -e "${green_bg} Step 11 ${NC}${green} Installing Docksal...${NC}"
   runuser -l docksal -c 'curl -fsSL get.docksal.io | zsh' >/dev/null
   usermod -aG docker docksal
