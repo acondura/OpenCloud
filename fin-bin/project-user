@@ -96,7 +96,7 @@ create_project_user()
     fi
 
     sudo cp -r "/home/docksal/.docksal" $USER_HOME
-    sudo cp -r "/home/docksal/.ssh/authorized_keys" "$USER_HOME/.ssh"
+    sudo cp -r "/home/docksal/.ssh" "$USER_HOME"
 
     sudo chown -R $USER:$USER $USER_HOME > /dev/null
 
