@@ -28,9 +28,9 @@ apt-get -y install apt-utils >/dev/null
 
 # Upgrade packages
 echo -e "${green_bg} Step 2 ${NC}${green} Upgrading and applying security updates...${NC}"
-apt-get -y upgrade >/dev/null
+# apt-get -y upgrade >/dev/null
 # This makes sure that ALL security updates are applied
-unattended-upgrade -d >/dev/null
+# unattended-upgrade -d >/dev/null
 
 # Install packages to allow apt to use a repository over HTTPS
 apt-get -y install apt-transport-https ca-certificates gnupg2 software-properties-common host >/dev/null
@@ -88,89 +88,90 @@ else
   #-------------------------------------------------------
 
   # Apply the above settings
-  service ssh restart
+  # service ssh restart
 
   echo -e "${green_bg} Step 7 ${NC}${green} Setting up the 'docksal' user...${NC}"
   touch /home/docksal/.zshrc
   chown docksal:docksal /home/docksal/.zshrc
 
   # Install Oh my Zsh
-  echo -e "${green_bg} Step 8 ${NC}${green} Installing Oh My ZSH!...${NC}"
-  if [ -d "/home/docksal/.oh-my-zsh" ]; then
-    rm -rf "/home/docksal/.oh-my-zsh"
-    rm -rf "/home/docksal/.zshrc"
-  fi
-  runuser -l docksal -c "curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh"
-  runuser -l docksal -c "echo 'alias s=\"cd ..\"' >> /home/docksal/.zshrc"
-  runuser -l docksal -c "sed -i 's/ZSH_THEME=\".*\"/ZSH_THEME=\"bira\"/g' /home/docksal/.zshrc"
+#  echo -e "${green_bg} Step 8 ${NC}${green} Installing Oh My ZSH!...${NC}"
+#  if [ -d "/home/docksal/.oh-my-zsh" ]; then
+#    rm -rf "/home/docksal/.oh-my-zsh"
+#    rm -rf "/home/docksal/.zshrc"
+#  fi
+#  runuser -l docksal -c "curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh"
+#  runuser -l docksal -c "echo 'alias s=\"cd ..\"' >> /home/docksal/.zshrc"
+#  runuser -l docksal -c "sed -i 's/ZSH_THEME=\".*\"/ZSH_THEME=\"bira\"/g' /home/docksal/.zshrc"
+#
+#  # Clone VimProc
+#  if [ -d /home/docksal/vimproc.vim ]; then
+#    rm -rf /home/docksal/vimproc.vim
+#  fi
+#  runuser -l docksal -c "git clone https://github.com/Shougo/vimproc.vim.git"
+#
+#  # Install SpaceVIM
+#  echo -e "${green_bg} Step 9 ${NC}${green} Installing SpaceVIM...${NC}"
+#  if [ -d /home/docksal/.SpaceVim ]; then
+#    rm -rf /home/docksal/.SpaceVim
+#  fi
+#  runuser -l docksal -c "curl -sLf https://spacevim.org/install.sh | bash" >/dev/null
+#
+#  # Add Vim Twig support
+#  echo -e "${green_bg} Step 10 ${NC}${green} Adding Twig support in VIM...${NC}"
+#  runuser -l docksal -c "git clone https://github.com/lumiliet/vim-twig.git" >/dev/null
+#
+#  if [ -d /home/docksal/.SpaceVim.d ]; then
+#    rm -rf /home/docksal/.SpaceVim.d
+#  fi
+#  mkdir /home/docksal/.SpaceVim.d
+#
+## Adding default configs for SpaceVIM usage
+#cat <<EOC >>/home/docksal/.SpaceVim.d/init.toml
+#  #=============================================================================
+#  # dark_powered.toml --- dark powered configuration example for SpaceVim
+#  # Copyright (c) 2016-2017 Wang Shidong & Contributors
+#  # Author: Wang Shidong < wsdjeg at 163.com >
+#  # URL: https://spacevim.org
+#  # License: GPLv3
+#  #=============================================================================
+#
+#  # All SpaceVim option below [option] section
+#  [options]
+#      # set spacevim theme. by default colorscheme layer is not loaded,
+#      # if you want to use more colorscheme, please load the colorscheme
+#      # layer
+#      colorscheme = "SpaceVim"
+#      background = "dark"
+#      # Disable guicolors in basic mode, many terminal do not support 24bit
+#      # true colors
+#      enable_guicolors = true
+#      # Disable statusline separator, if you want to use other value, please
+#      # install nerd fonts
+#      statusline_separator = "arrow"
+#      statusline_inactive_separator = "arrow"
+#      buffer_index_type = 4
+#      enable_tabline_filetype_icon = true
+#      enable_statusline_display_mode = false
+#
+#  # Enable autocomplete layer
+#  [[layers]]
+#  name = 'autocomplete'
+#  auto-completion-return-key-behavior = "complete"
+#  auto-completion-tab-key-behavior = "smart"
+#
+#  [[layers]]
+#  name = 'shell'
+#  default_position = 'top'
+#  default_height = 30
+#
+#  # This is an example for adding custom plugins
+#  [[custom_plugins]]
+#    name = "lumiliet/vim-twig"
+#    merged = false
+#EOC
 
-  # Clone VimProc
-  if [ -d /home/docksal/vimproc.vim ]; then
-    rm -rf /home/docksal/vimproc.vim
-  fi
-  runuser -l docksal -c "git clone https://github.com/Shougo/vimproc.vim.git"
-
-  # Install SpaceVIM
-  echo -e "${green_bg} Step 9 ${NC}${green} Installing SpaceVIM...${NC}"
-  if [ -d /home/docksal/.SpaceVim ]; then
-    rm -rf /home/docksal/.SpaceVim
-  fi
-  runuser -l docksal -c "curl -sLf https://spacevim.org/install.sh | bash" >/dev/null
-
-  # Add Vim Twig support
-  echo -e "${green_bg} Step 10 ${NC}${green} Adding Twig support in VIM...${NC}"
-  runuser -l docksal -c "git clone https://github.com/lumiliet/vim-twig.git" >/dev/null
-
-  if [ -d /home/docksal/.SpaceVim.d ]; then
-    rm -rf /home/docksal/.SpaceVim.d
-  fi
-  mkdir /home/docksal/.SpaceVim.d
-
-# Adding default configs for SpaceVIM usage
-cat <<EOC >>/home/docksal/.SpaceVim.d/init.toml
-  #=============================================================================
-  # dark_powered.toml --- dark powered configuration example for SpaceVim
-  # Copyright (c) 2016-2017 Wang Shidong & Contributors
-  # Author: Wang Shidong < wsdjeg at 163.com >
-  # URL: https://spacevim.org
-  # License: GPLv3
-  #=============================================================================
-
-  # All SpaceVim option below [option] section
-  [options]
-      # set spacevim theme. by default colorscheme layer is not loaded,
-      # if you want to use more colorscheme, please load the colorscheme
-      # layer
-      colorscheme = "SpaceVim"
-      background = "dark"
-      # Disable guicolors in basic mode, many terminal do not support 24bit
-      # true colors
-      enable_guicolors = true
-      # Disable statusline separator, if you want to use other value, please
-      # install nerd fonts
-      statusline_separator = "arrow"
-      statusline_inactive_separator = "arrow"
-      buffer_index_type = 4
-      enable_tabline_filetype_icon = true
-      enable_statusline_display_mode = false
-
-  # Enable autocomplete layer
-  [[layers]]
-  name = 'autocomplete'
-  auto-completion-return-key-behavior = "complete"
-  auto-completion-tab-key-behavior = "smart"
-
-  [[layers]]
-  name = 'shell'
-  default_position = 'top'
-  default_height = 30
-
-  # This is an example for adding custom plugins
-  [[custom_plugins]]
-    name = "lumiliet/vim-twig"
-    merged = false
-EOC
-  chown -R docksal:docksal /home/docksal/.SpaceVim.d
+  # chown -R docksal:docksal /home/docksal/.SpaceVim.d
 
   # Install Docksal
   echo -e "${green_bg} Step 11 ${NC}${green} Installing Docksal...${NC}"
