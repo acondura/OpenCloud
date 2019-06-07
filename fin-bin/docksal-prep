@@ -171,7 +171,7 @@ else
 #    merged = false
 #EOC
 
-  chown -R docksal:docksal /home/docksal/.SpaceVim.d
+  # chown -R docksal:docksal /home/docksal/.SpaceVim.d
 
   # Install Docksal
   echo -e "${green_bg} Step 11 ${NC}${green} Installing Docksal...${NC}"
