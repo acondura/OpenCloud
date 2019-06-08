@@ -70,11 +70,11 @@ create_sandbox_user()
 
   echo-green " - Installing 'Oh My ZSH!'"
   OH_MY_ZSH="https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh"
-  sudo runuser -l $USER -c "cd $BRANCH_DIR; curl -fsSL $OH_MY_ZSH | bash"
+  sudo runuser -l $BRANCH -c "cd $BRANCH_DIR; curl -fsSL $OH_MY_ZSH | bash"
 
   echo-green " - Installing SpaceVIM"
   SPACEVIM="https://spacevim.org/install.sh"
-  sudo runuser -l $USER -c "cd $BRANCH_DIR; curl -sLf $SPACEVIM | bash" >/dev/null 2>&1
+  sudo runuser -l $BRANCH -c "cd $BRANCH_DIR; curl -sLf $SPACEVIM | bash" >/dev/null 2>&1
 
   # Point VIM to use SPACEVIM
   echo-green " - Making sure Vim uses SpaceVIM"
@@ -82,7 +82,7 @@ create_sandbox_user()
 
   echo-green " - Installing vimproc for interactive command execution in Vim"
   VIMPROC="https://github.com/Shougo/vimproc.vim.git"
-  sudo runuser -l $USER -c "cd $BRANCH_DIR; git clone $VIMPROC" >/dev/null 2>&1
+  sudo runuser -l $BRANCH -c "cd $BRANCH_DIR; git clone $VIMPROC" >/dev/null 2>&1
 
   sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR > /dev/null
 }
