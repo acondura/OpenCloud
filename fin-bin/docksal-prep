@@ -107,6 +107,10 @@ echo ""
 
   runuser -l docksal -c 'fin system reset'
 
+  echo "Make sure you add the following server SSH public key to your repo:"
+echo ""
+  echo /home/docksal/.ssh/bitbucket_id_rsa.pub
+echo ""
   echo -e "${green} Rebooting the server to apply settings...${NC}"
 echo ""
   reboot
