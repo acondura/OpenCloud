@@ -91,7 +91,8 @@ echo ""
   echo -e " - ${NC}${green} Setting up the 'docksal' user...${NC}"
 echo ""
   runuser -l docksal -c 'git clone https://github.com/acondura/OpenCloud.git' >/dev/null 2>&1
-  runuser -l docksal -c 'echo \"export PATH="$PATH:/home/docksal/OpenCloud/fin-bin" >> /home/docksal/.profile\"'
+  echo 'export PATH="$PATH:/home/docksal/OpenCloud/fin-bin"' >> /home/docksal/.profile
+  chown -R docksal:docksal /home/docksal/.profile
 
 
   # Install Docksal
