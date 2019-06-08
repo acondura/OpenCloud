@@ -90,14 +90,15 @@ echo ""
 
   echo -e " - ${NC}${green} Setting up the 'docksal' user...${NC}"
 echo ""
+  runuser -l docksal -c 'git clone https://github.com/acondura/OpenCloud.git' >/dev/null 2>&1
+  runuser -l docksal -c 'echo \"export PATH="$PATH:/home/docksal/OpenCloud/fin-bin" >> /home/docksal/.profile\"'
+
 
   # Install Docksal
   echo -e " - ${NC}${green} Installing Docksal...${NC}"
 echo ""
   runuser -l docksal -c 'curl -fsSL get.docksal.io | bash' >/dev/null 2>&1
   usermod -aG docker docksal
-
-  runuser -l docksal -c 'echo \"export PATH="$PATH:/home/docksal/OpenCloud/fin-bin" >> /home/docksal/.profile\"'
 
   # Set the proxy ip in the global docksal environment file.
   runuser -l docksal -c "echo 'DOCKSAL_VHOST_PROXY_IP=\"0.0.0.0\"' >> /home/docksal/.docksal/docksal.env"
