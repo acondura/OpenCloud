@@ -22,7 +22,7 @@ echo-green-bg () { echo -e "${green_bg}$1${NC}"; }
 echo-yellow () { echo -e "${yellow}$1${NC}"; }
 
 #-------------------------- Execution --------------------------------
-
+clear
 if [ -z "$1" ]
   then
     echo "No project user supplied"
@@ -56,7 +56,7 @@ create_project_user()
   if id "$USER" >/dev/null 2>&1; then
     echo-yellow "User '$USER' exists, go to $USER_HOME"
   else
-    echo-green " -Creating user '$USER' using home: '$USER_HOME'"
+    echo-green " - Creating user '$USER' using home: '$USER_HOME'"
 
     # No password, we're using SSH keys
     # No interaction
@@ -65,7 +65,7 @@ create_project_user()
     sudo adduser --disabled-password --gecos "" --shell /usr/bin/zsh --home $USER_HOME $USER >/dev/null 2>&1
     
     # Make sure the user's home is owned by the user
-    echo-green " -Making sure the user's home is owned by the user"
+    echo-green " - Making sure the user's home is owned by the user"
     sudo chown -R $USER:$USER $USER_HOME > /dev/null
 
     # If the 'project' dir doesn't exist, create it
@@ -74,19 +74,19 @@ create_project_user()
       sudo runuser -l $USER -c "cd $USER_HOME; mkdir $USER_PROJECT" > /dev/null
     fi
 
-    echo-green " -Installing 'Oh My ZSH!'"
+    echo-green " - Installing 'Oh My ZSH!'"
     OH_MY_ZSH="https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh"
     sudo runuser -l $USER -c "cd $USER_HOME; curl -fsSL $OH_MY_ZSH | bash" >/dev/null 2>&1
 
-    echo-green " -Installing SpaceVIM"
+    echo-green " - Installing SpaceVIM"
     SPACEVIM="https://spacevim.org/install.sh"
     sudo runuser -l $USER -c "cd $USER_HOME; curl -sLf $SPACEVIM | bash" >/dev/null 2>&1
 
     # Point VIM to use SPACEVIM
-    echo-green " -Making sure Vim uses SpaceVIM"
+    echo-green " - Making sure Vim uses SpaceVIM"
     sudo ln -s $USER_HOME/.SpaceVim $USER_HOME/.vim > /dev/null
 
-    echo-green " -Installing vimproc for interactive command execution in Vim"
+    echo-green " - Installing vimproc for interactive command execution in Vim"
     VIMPROC="https://github.com/Shougo/vimproc.vim.git"
     sudo runuser -l $USER -c "cd $USER_HOME; git clone $VIMPROC" >/dev/null 2>&1
     echo "Plugin 'Shougo/vimproc.vim'" >> $USER_HOME/.vimrc
@@ -98,7 +98,7 @@ create_project_user()
 
     sudo usermod -aG docker $USER 
 
-    echo-green " -You can now login with $USER@[IP/DOMAIN]"
+    echo-green " - You can now login with $USER@[IP/DOMAIN]"
   fi
 }
 
