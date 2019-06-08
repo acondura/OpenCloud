@@ -18,7 +18,7 @@ echo-yellow () { echo -e "${yellow}$1${NC}"; }
 
 set -e
 
-echo -e "${green_bg} - ${NC}${green} Updating packages...${NC}"
+echo -e " - ${NC}${green} Updating packages...${NC}"
 echo ""
 
 export DEBIAN_FRONTEND=noninteractive
@@ -28,7 +28,7 @@ apt-get update >/dev/null
 apt-get -y install apt-utils >/dev/null
 
 # Upgrade packages
-# echo -e "${green_bg} - ${NC}${green} Upgrading and applying security updates...${NC}"
+# echo -e " - ${NC}${green} Upgrading and applying security updates...${NC}"
 # apt-get -y upgrade >/dev/null
 # This makes sure that ALL security updates are applied
 # unattended-upgrade -d >/dev/null
@@ -37,12 +37,12 @@ apt-get -y install apt-utils >/dev/null
 apt-get -y install apt-transport-https ca-certificates gnupg2 software-properties-common host >/dev/null
 
 # Install Oh my ZSH
-echo -e "${green_bg} - ${NC}${green} Installing required packages (zsh, git, gcc, etc.)...${NC}"
+echo -e " - ${NC}${green} Installing required packages (zsh, git, gcc, etc.)...${NC}"
 echo ""
 apt-get -y install curl zsh git p7zip-full tmux pv parallel unzip >/dev/null
 
 # LetsEncrypt Certbot
-echo -e "${green_bg} - ${NC}${green} Installing LetsEncrypt...${NC}"
+echo -e " - ${NC}${green} Installing LetsEncrypt...${NC}"
 echo ""
 apt-get -y install certbot >/dev/null
 
@@ -51,7 +51,7 @@ if id "docksal" >/dev/null 2>&1; then
   echo "Docksal user exists, start using it..."
 else 
 ######################## If 'docksal' user DOES NOT exist
-  echo -e "${green_bg} - ${NC}${green} Creating the 'docksal' user...${NC}"
+  echo -e " - ${NC}${green} Creating the 'docksal' user...${NC}"
 echo ""
 
   # Add docksal as a sudo group with no password
@@ -66,7 +66,7 @@ echo ""
   chown -R docksal:docksal /home/docksal/.ssh
 
   # Set SSH to run with NO password, just SSH keys
-  echo -e "${green_bg} - ${NC}${green} Securing the server to accept no passwords, just SSH keys and non-root logins${NC}"
+  echo -e " - ${NC}${green} Securing the server to accept no passwords, just SSH keys and non-root logins${NC}"
 echo ""
 
 ##### SSH Client settings (ssh_config)
@@ -88,11 +88,11 @@ echo ""
   echo 'ClientAliveInterval 300' >> /etc/ssh/sshd_config
 #-------------------------------------------------------
 
-  echo -e "${green_bg} - ${NC}${green} Setting up the 'docksal' user...${NC}"
+  echo -e " - ${NC}${green} Setting up the 'docksal' user...${NC}"
 echo ""
 
   # Install Docksal
-  echo -e "${green_bg} - ${NC}${green} Installing Docksal...${NC}"
+  echo -e " - ${NC}${green} Installing Docksal...${NC}"
 echo ""
   runuser -l docksal -c 'curl -fsSL get.docksal.io | bash' >/dev/null 2>&1
   usermod -aG docker docksal
