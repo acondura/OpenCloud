@@ -51,14 +51,12 @@ else
   echo -e "${green_bg} - ${NC}${green} Creating the 'docksal' user...${NC}"
 
   # This needs to run only once, when the 'docksal' user is created
-  rm -rf /etc/sudoers
   apt-get -y install sudo
 
   # Add docksal as a sudo group with no password
-  echo "root	ALL=(ALL:ALL) ALL" >> /etc/sudoers
   echo "docksal ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
   # Create the docksal user
-  adduser --disabled-password --gecos "" --shell /bin/bash docksal
+  adduser --disabled-password --gecos "" --shell /bin/bash docksal >/dev/null 2>&1
   # Assign the docksal group to the user
   usermod -aG docksal docksal
   # Make sure the SSH key is in place
