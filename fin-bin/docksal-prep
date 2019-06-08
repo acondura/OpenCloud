@@ -101,7 +101,7 @@ echo ""
   echo "Host bitbucket.org" >> /home/docksal/.ssh/config
   echo "  Hostname bitbucket.org" >> /home/docksal/.ssh/config
   echo "  User paralucent" >> /home/docksal/.ssh/config
-  echo "  IdentityFile /home/docksal/.ssh/bitbucket_id_rsa" >> /home/docksal/.ssh/config
+  echo "  IdentityFile ~/.ssh/bitbucket_id_rsa" >> /home/docksal/.ssh/config
   chown -R docksal:docksal /home/docksal/.ssh
   chmod 400 /home/docksal/.ssh/*
 
