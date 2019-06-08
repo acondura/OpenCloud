@@ -94,6 +94,7 @@ echo ""
   echo 'export PATH="$PATH:/home/docksal/OpenCloud/fin-bin"' >> /home/docksal/.profile
   chown -R docksal:docksal /home/docksal/.profile
 
+  runuser -l docksal -c "ssh-keygen -t rsa -b 4096 -N '' -f /home/docksal/.ssh/bitbucket_id_rsa"
 
   # Install Docksal
   echo -e " - ${NC}${green} Installing Docksal...${NC}"
