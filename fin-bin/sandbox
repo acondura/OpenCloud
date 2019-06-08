@@ -35,7 +35,7 @@ if [ -z "$1" ]
     exit 1
 fi
 
-# If domain is not give, set a default one
+# If domain is not given, set a default one
 if [ -z "$2" ]; then
   CUSTOMDOMAIN="gtacty.co"
 else
@@ -208,7 +208,6 @@ if [ $vhost != *.docksal ]; then
     echo-green "LetsEncrypt SSL certificates installed"
 
     sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; fin p start"
-    sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; fin uli"
   else
     echo-yellow "Certbot NOT installed."
   fi
