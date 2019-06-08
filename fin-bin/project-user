@@ -89,7 +89,7 @@ create_project_user()
     echo-green " - Installing vimproc for interactive command execution in Vim"
     VIMPROC="https://github.com/Shougo/vimproc.vim.git"
     sudo runuser -l $USER -c "cd $USER_HOME; git clone $VIMPROC" >/dev/null 2>&1
-    sudo echo "Plugin 'Shougo/vimproc.vim'" >> "$USER_HOME/.SpaceVim/vimrc"
+    sudo runuser -l $USER -c "cd $USER_HOME; echo \"Plugin 'Shougo/vimproc.vim'\" >> $USER_HOME/.SpaceVim/vimrc"
 
     sudo cp -r "/home/docksal/.docksal" $USER_HOME
     sudo cp -r "/home/docksal/.ssh" "$USER_HOME"
