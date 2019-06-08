@@ -89,7 +89,6 @@ create_sandbox_user()
 
 get_repo()
 {
-  sudo rm -rf $BRANCH_ROOT
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT;  git clone $GIT_REPO $BRANCH_ROOT"
   sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR > /dev/null
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git init" > /dev/null
