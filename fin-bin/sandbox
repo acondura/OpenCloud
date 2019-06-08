@@ -49,6 +49,7 @@ SANDBOX_ROOT="/home"
 BRANCH_DIR="$SANDBOX_ROOT/$BRANCH"
 GIT_REPO=$(git config --get remote.origin.url)
 BRANCH_ROOT="$BRANCH_DIR/project/$BRANCH"
+BRANCH_DOMAIN="$BRANCH.$CUSTOMDOMAIN"
 PROJECT_ROOT=$PWD
 
 create_sandbox_user()
@@ -107,6 +108,12 @@ initialize_stack()
   sudo rm -rf $BRANCH_DIR/.docksal/alias
   sudo mkdir $BRANCH_DIR/.docksal/alias
   sudo chown -R $BRANCH:$BRANCH "$BRANCH_DIR/.docksal"
+
+  if [ -f "$BRANCH_ROOT/.docksal/docksal-local.env" ]; then
+    sudo rm -rf "$BRANCH_ROOT/.docksal/docksal-local.env"
+  fi
+  sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT/.docksal; echo \"VIRTUAL_HOST=$BRANCH_DOMAIN\" > $BRANCH_ROOT/.docksal/docksal-local.env"
+
   # Stack initialization
   if [[ $DOCKER_RUNNING == "true" ]]; then
     sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; fin reset -f"
