@@ -52,21 +52,6 @@ apt-get -y install certbot >/dev/null
 if id "docksal" >/dev/null 2>&1; then
   echo "Docksal user exists, start using it..."
 else 
-######################## If 'docksal' user DOES NOT exist
-  echo -e " - ${NC}${green} Creating the 'docksal' user...${NC}"
-echo ""
-
-  # Add docksal as a sudo group with no password
-  echo "docksal ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-  # Create the docksal user
-  adduser --disabled-password --gecos "" --shell /bin/bash docksal >/dev/null 2>&1
-  # Assign the docksal group to the user
-  usermod -aG docksal docksal
-  # Make sure the SSH key is in place
-  mkdir /home/docksal/.ssh
-  cp -rf /root/.ssh/authorized_keys /home/docksal/.ssh
-  chown -R docksal:docksal /home/docksal/.ssh
-
   # Set SSH to run with NO password, just SSH keys
   echo -e " - ${NC}${green} Securing the server to accept no passwords, just SSH keys and non-root logins${NC}"
 echo ""
@@ -89,6 +74,21 @@ echo ""
   sed -i '/.*ClientAliveInterval.*/d' /etc/ssh/sshd_config
   echo 'ClientAliveInterval 300' >> /etc/ssh/sshd_config
 #-------------------------------------------------------
+
+######################## If 'docksal' user DOES NOT exist
+  echo -e " - ${NC}${green} Creating the 'docksal' user...${NC}"
+echo ""
+
+  # Add docksal as a sudo group with no password
+  echo "docksal ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+  # Create the docksal user
+  adduser --disabled-password --gecos "" --shell /bin/bash docksal >/dev/null 2>&1
+  # Assign the docksal group to the user
+  usermod -aG docksal docksal
+  # Make sure the SSH key is in place
+  mkdir /home/docksal/.ssh
+  cp -rf /root/.ssh/authorized_keys /home/docksal/.ssh
+  chown -R docksal:docksal /home/docksal/.ssh
 
   echo -e " - ${NC}${green} Setting up the 'docksal' user...${NC}"
 echo ""
