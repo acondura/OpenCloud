@@ -19,6 +19,7 @@ echo-yellow () { echo -e "${yellow}$1${NC}"; }
 set -e
 
 echo -e "${green_bg} - ${NC}${green} Updating packages...${NC}"
+echo ""
 
 export DEBIAN_FRONTEND=noninteractive
 
@@ -37,10 +38,12 @@ apt-get -y install apt-transport-https ca-certificates gnupg2 software-propertie
 
 # Install Oh my ZSH
 echo -e "${green_bg} - ${NC}${green} Installing required packages (zsh, git, gcc, etc.)...${NC}"
+echo ""
 apt-get -y install curl zsh git p7zip-full tmux pv parallel unzip >/dev/null
 
 # LetsEncrypt Certbot
 echo -e "${green_bg} - ${NC}${green} Installing LetsEncrypt...${NC}"
+echo ""
 apt-get -y install certbot >/dev/null
 
 ######################## If 'docksal' user exists
@@ -49,9 +52,7 @@ if id "docksal" >/dev/null 2>&1; then
 else 
 ######################## If 'docksal' user DOES NOT exist
   echo -e "${green_bg} - ${NC}${green} Creating the 'docksal' user...${NC}"
-
-  # This needs to run only once, when the 'docksal' user is created
-  apt-get -y install sudo
+echo ""
 
   # Add docksal as a sudo group with no password
   echo "docksal ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
@@ -66,6 +67,7 @@ else
 
   # Set SSH to run with NO password, just SSH keys
   echo -e "${green_bg} - ${NC}${green} Securing the server to accept no passwords, just SSH keys and non-root logins${NC}"
+echo ""
 
 ##### SSH Client settings (ssh_config)
   sed -i '/.*PasswordAuthentication.*/d' /etc/ssh/ssh_config
@@ -87,20 +89,12 @@ else
 #-------------------------------------------------------
 
   echo -e "${green_bg} - ${NC}${green} Setting up the 'docksal' user...${NC}"
-
-#  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - >/dev/null
-#
-#  add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" >/dev/null
-#
-#  apt-get update -qq >/dev/null
-#
-#  apt-get install -y -qq --allow-downgrades --no-install-recommends docker-ce-cli=5:18.09.2~3-0~ubuntu-bionic >/dev/null
-#
-#  apt-get install -y -qq --allow-downgrades --no-install-recommends docker-ce=5:18.09.2~3-0~ubuntu-bionic >/dev/null
+echo ""
 
   # Install Docksal
   echo -e "${green_bg} - ${NC}${green} Installing Docksal...${NC}"
-  runuser -l docksal -c 'curl -fsSL get.docksal.io | zsh' >/dev/null
+echo ""
+  runuser -l docksal -c 'curl -fsSL get.docksal.io | bash' >/dev/null 2>&1
   usermod -aG docker docksal
 
   runuser -l docksal -c 'echo \"export PATH="$PATH:/home/docksal/OpenCloud/fin-bin" >> /home/docksal/.profile\"'
@@ -109,9 +103,11 @@ else
   runuser -l docksal -c "echo 'DOCKSAL_VHOST_PROXY_IP=\"0.0.0.0\"' >> /home/docksal/.docksal/docksal.env"
 
   echo -e "${green} Making sure Docksal responds...${NC}"
-  runuser -l docksal -c 'fin system reset'
+echo ""
+  runuser -l docksal -c 'fin system reset; fin system start'
 
   echo -e "${green} Rebooting the server to apply settings...${NC}"
+echo ""
   reboot
 
 fi
