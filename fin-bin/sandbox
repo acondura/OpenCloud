@@ -70,7 +70,7 @@ create_sandbox_user()
 
   echo-green " - Installing 'Oh My ZSH!'"
   OH_MY_ZSH="https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh"
-  sudo runuser -l $BRANCH -c "cd $BRANCH_DIR; curl -fsSL $OH_MY_ZSH | bash"
+  sudo runuser -l $BRANCH -c "cd $BRANCH_DIR; curl -fsSL $OH_MY_ZSH | bash" >/dev/null 2>&1
 
   echo-green " - Installing SpaceVIM"
   SPACEVIM="https://spacevim.org/install.sh"
@@ -89,7 +89,8 @@ create_sandbox_user()
 
 get_repo()
 {
-  sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT;  git clone $GIT_REPO $BRANCH_ROOT"
+  sudo runuser -l $BRANCH -c "cd; mkdir -p $BRANCH_DIR/project"
+  sudo runuser -l $BRANCH -c "cd $BRANCH_DIR/project;  git clone $GIT_REPO $BRANCH"
   sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR > /dev/null
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git init" > /dev/null
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git branch $BRANCH"
