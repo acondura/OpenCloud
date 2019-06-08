@@ -117,7 +117,7 @@ echo ""
 
   echo "Make sure you add the following server SSH public key to your repo:"
 echo ""
-  echo "cat /home/docksal/.ssh/bitbucket_id_rsa.pub"
+  cat /home/docksal/.ssh/bitbucket_id_rsa.pub
 echo ""
   echo -e "${green} Rebooting the server to apply settings...${NC}"
 echo ""
