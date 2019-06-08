@@ -190,7 +190,9 @@ if [ $vhost != *.docksal ]; then
     sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; fin p start"
     LOCAL_SETTINGS="$BRANCH_ROOT/$DOCROOT/sites/default/settings.local.php"
     
-    sudo cp -r $DOCROOT/sites/default/files $BRANCH_ROOT/$DOCROOT/sites/default
+    if [ -f "$DOCROOT/sites/default/files" ]; then
+      sudo cp -r $DOCROOT/sites/default/files $BRANCH_ROOT/$DOCROOT/sites/default
+    fi
     sudo chown -R $BRANCH $BRANCH_ROOT
 
     # Make sure sites/default is writable
@@ -230,7 +232,7 @@ echo-green "4. Set public IP and domain for branch..."
 set_public_ip
 
 echo ""
-echo-green "5. Get SSL certificate..."
+echo-green "5. Copying SSL certificates if they exist in 'docksal' user..."
 get_ssl
 
 # Make sure everything is owned by the branch
