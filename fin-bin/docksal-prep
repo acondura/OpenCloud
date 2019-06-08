@@ -102,6 +102,7 @@ echo ""
   echo "  User paralucent" >> /home/docksal/.ssh/config
   echo "  IdentityFile /home/docksal/.ssh/bitbucket_id_rsa" >> /home/docksal/.ssh/config
   chown -R docksal:docksal /home/docksal/.ssh
+  chmod 400 /home/docksal/.ssh/*
 
   # Install Docksal
   echo -e " - ${NC}${green} Installing Docksal...${NC}"
