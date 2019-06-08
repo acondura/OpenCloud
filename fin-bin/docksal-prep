@@ -18,6 +18,7 @@ echo-yellow () { echo -e "${yellow}$1${NC}"; }
 
 set -e
 
+clear
 echo -e " - ${NC}${green} Updating packages...${NC}"
 echo ""
 
