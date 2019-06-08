@@ -74,13 +74,13 @@ create_project_user()
       sudo runuser -l $USER -c "cd $USER_HOME; mkdir $USER_PROJECT" > /dev/null
     fi
 
-    echo-green " -Installing Oh My ZSH!"
+    echo-green " -Installing 'Oh My ZSH!'"
     OH_MY_ZSH="https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh"
-    sudo runuser -l $USER -c "cd $USER_HOME; curl -fsSL $OH_MY_ZSH | bash" > /dev/null
+    sudo runuser -l $USER -c "cd $USER_HOME; curl -fsSL $OH_MY_ZSH | bash" >/dev/null 2>&1
 
     echo-green " -Installing SpaceVIM"
     SPACEVIM="https://spacevim.org/install.sh"
-    sudo runuser -l $USER -c "cd $USER_HOME; curl -sLf $SPACEVIM | bash" > /dev/null
+    sudo runuser -l $USER -c "cd $USER_HOME; curl -sLf $SPACEVIM | bash" >/dev/null 2>&1
 
     # Point VIM to use SPACEVIM
     echo-green " -Making sure Vim uses SpaceVIM"
@@ -88,22 +88,16 @@ create_project_user()
 
     echo-green " -Installing vimproc for interactive command execution in Vim"
     VIMPROC="https://github.com/Shougo/vimproc.vim.git"
-    sudo runuser -l $USER -c "cd $USER_HOME; git clone $VIMPROC" > /dev/null
-
-    # If '.ssh' dir doesn't exist, create it
-    if [ ! -d "$USER_HOME/.ssh" ]; then
-      sudo runuser -l $USER -c "cd $USER_HOME; mkdir \"$USER_HOME/.ssh\"" > /dev/null
-    fi
+    sudo runuser -l $USER -c "cd $USER_HOME; git clone $VIMPROC" >/dev/null 2>&1
 
     sudo cp -r "/home/docksal/.docksal" $USER_HOME
     sudo cp -r "/home/docksal/.ssh" "$USER_HOME"
 
     sudo chown -R $USER:$USER $USER_HOME > /dev/null
 
-    sudo adduser $USER docker
+    sudo usermod -aG $USER docker
 
-    echo-green " -Please make sure you add a public key at $USER_HOME/.ssh/authorized_keys"
-    echo-green " -You can then login with $USER@wd1.condurachi.ro"
+    echo-green " -You can now login with $USER@[IP/DOMAIN]"
   fi
 }
 
