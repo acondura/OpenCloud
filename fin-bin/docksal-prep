@@ -97,6 +97,12 @@ echo ""
 
   runuser -l docksal -c "ssh-keygen -t rsa -b 4096 -N '' -f /home/docksal/.ssh/bitbucket_id_rsa" >/dev/null 2>&1
 
+  echo "Host bitbucket.org" >> /home/docksal/.ssh/config
+  echo "  Hostname bitbucket.org" >> /home/docksal/.ssh/config
+  echo "  User paralucent" >> /home/docksal/.ssh/config
+  echo "  IdentityFile /home/docksal/.ssh/bitbucket_id_rsa" >> /home/docksal/.ssh/config
+  chown -R docksal:docksal /home/docksal/.ssh
+
   # Install Docksal
   echo -e " - ${NC}${green} Installing Docksal...${NC}"
 echo ""
