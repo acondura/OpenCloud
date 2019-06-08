@@ -104,8 +104,6 @@ echo ""
   # Set the proxy ip in the global docksal environment file.
   runuser -l docksal -c "echo 'DOCKSAL_VHOST_PROXY_IP=\"0.0.0.0\"' >> /home/docksal/.docksal/docksal.env"
 
-  echo -e "${green} Making sure Docksal responds...${NC}"
-echo ""
   runuser -l docksal -c 'fin system reset'
 
   echo -e "${green} Rebooting the server to apply settings...${NC}"
