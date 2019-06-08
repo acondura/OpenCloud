@@ -37,7 +37,7 @@ fi
 # Lowercase the branch name for consistency
 BRANCH=$(echo "$1" | tr '[:upper:]' '[:lower:]')
 
-SANDBOX_ROOT="/mnt/sandbox1"
+SANDBOX_ROOT="/home"
 BRANCH_DIR="$SANDBOX_ROOT/$BRANCH"
 GIT_REPO=$(git config --get remote.origin.url)
 BRANCH_ROOT="$BRANCH_DIR/project/$BRANCH"
