@@ -169,7 +169,7 @@ get_ssl()
   # Grab the project root directory name
   project=$(basename $BRANCH_ROOT | sed 's/\./-/g')
   # Wildcard DNS 1
-  vhost="$project.$CUSTOMDOMAIN"
+  vhost="$BRANCH_DOMAIN"
 
   fin p start
 
@@ -177,8 +177,12 @@ get_ssl()
 if [ $vhost != *.docksal ]; then
   if [ -f /usr/bin/certbot ]; then
     # Wildcard DNS
-    sudo cp -r "$BRANCH_DIR/.docksal/certs/$CUSTOMDOMAIN.crt" "$BRANCH_DIR/.docksal/certs/$vhost.crt"
-    sudo cp -r "$BRANCH_DIR/.docksal/certs/$CUSTOMDOMAIN.key" "$BRANCH_DIR/.docksal/certs/$vhost.key"
+    if [ -f "$BRANCH_DIR/.docksal/certs/$CUSTOMDOMAIN.crt" ]; then
+      sudo cp -r "$BRANCH_DIR/.docksal/certs/$CUSTOMDOMAIN.crt" "$BRANCH_DIR/.docksal/certs/$vhost.crt"
+    fi
+    if [ -f "$BRANCH_DIR/.docksal/certs/$CUSTOMDOMAIN.key" ]; then
+      sudo cp -r "$BRANCH_DIR/.docksal/certs/$CUSTOMDOMAIN.key" "$BRANCH_DIR/.docksal/certs/$vhost.key"
+    fi
     sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR/.docksal
 
     # Fix DOCROOT variable, hardcoding for now
