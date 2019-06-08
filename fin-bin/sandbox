@@ -23,6 +23,7 @@ echo-yellow () { echo -e "${yellow}$1${NC}"; }
 
 #-------------------------- Execution --------------------------------
 
+clear
 if [ ! -d ".docksal" ]; then
   echo-red "Cannot detect project root. Please make sure you run the sandbox command from a Dockal project's root folder."
   exit 1
@@ -30,8 +31,15 @@ fi
 
 if [ -z "$1" ]
   then
-    echo "No argument supplied"
+    echo "No argument supplied, please supply a user name."
     exit 1
+fi
+
+# If domain is not give, set a default one
+if [ -z "$2" ]; then
+  CUSTOMDOMAIN="gtacty.co"
+else
+  CUSTOMDOMAIN="$2"
 fi
 
 # Lowercase the branch name for consistency
@@ -48,7 +56,7 @@ create_sandbox_user()
   if id "$BRANCH" >/dev/null 2>&1; then
     echo-yellow "User $BRANCH exists, go to $BRANCH_DIR"
   else
-    echo-green "Creating user '$BRANCH' using home: '$BRANCH_DIR'"
+    echo-green " - Creating user '$BRANCH' using home: '$BRANCH_DIR'"
     sudo adduser --disabled-password --gecos "" --shell /usr/bin/zsh --home $BRANCH_DIR $BRANCH > /dev/null
   fi
 
@@ -57,20 +65,24 @@ create_sandbox_user()
     sudo mkdir "$BRANCH_DIR/.ssh"
   fi
 
-  sudo chown -R $BRANCH:$BRANCH "$BRANCH_DIR/.ssh" > /dev/null
-  sudo runuser -l $BRANCH -c "cd $BRANCH_DIR; ssh-keygen -t rsa -b 4096 -N '' -f .ssh/id_rsa.key"
-
-  sudo cp -rf /home/docksal/.ssh/authorized_keys $BRANCH_DIR/.ssh > /dev/null
+  sudo cp -rf /home/docksal/.ssh $BRANCH_DIR > /dev/null
   sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR > /dev/null
 
-  sudo cp -rf /home/docksal/.SpaceVim $BRANCH_DIR > /dev/null
-  sudo cp -rf /home/docksal/.SpaceVim.d $BRANCH_DIR > /dev/null
-  sudo cp -rf /home/docksal/.oh-my-zsh $BRANCH_DIR > /dev/null
-  sudo cp -rf /home/docksal/.zshrc $BRANCH_DIR > /dev/null
-  sudo sed -i 's/\/home\/docksal/\$HOME/g' $BRANCH_DIR/.zshrc
-  sudo cp -rf /home/docksal/.profile $BRANCH_DIR > /dev/null
-  sudo ln -s $BRANCH_DIR/.SpaceVim $BRANCH_DIR/.vim
-  # sudo git clone https://github.com/Shougo/vimproc.vim.git > /dev/null
+  echo-green " - Installing 'Oh My ZSH!'"
+  OH_MY_ZSH="https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh"
+  sudo runuser -l $USER -c "cd $USER_HOME; curl -fsSL $OH_MY_ZSH | bash" >/dev/null 2>&1
+
+  echo-green " - Installing SpaceVIM"
+  SPACEVIM="https://spacevim.org/install.sh"
+  sudo runuser -l $USER -c "cd $USER_HOME; curl -sLf $SPACEVIM | bash" >/dev/null 2>&1
+
+  # Point VIM to use SPACEVIM
+  echo-green " - Making sure Vim uses SpaceVIM"
+  sudo ln -s $USER_HOME/.SpaceVim $USER_HOME/.vim > /dev/null
+
+  echo-green " - Installing vimproc for interactive command execution in Vim"
+  VIMPROC="https://github.com/Shougo/vimproc.vim.git"
+  sudo runuser -l $USER -c "cd $USER_HOME; git clone $VIMPROC" >/dev/null 2>&1
 
   sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR > /dev/null
 }
@@ -78,14 +90,13 @@ create_sandbox_user()
 get_repo()
 {
   sudo rm -rf $BRANCH_ROOT
-  # sudo runuser -l $BRANCH -c "cd $BRANCH_DIR; git clone $GIT_REPO $BRANCH_ROOT"
-  sudo GIT_SSH_COMMAND="ssh -i /home/docksal/.ssh/id_rsa" git clone $GIT_REPO $BRANCH_ROOT
+  sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT;  git clone $GIT_REPO $BRANCH_ROOT"
   sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR > /dev/null
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git init" > /dev/null
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git branch $BRANCH"
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git checkout $BRANCH"
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git config --global user.email 'you@example.com'"
-  sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git config --global user.name 'Your Name'"
+  sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git config --global user.name '$BRANCH'"
 }
 
 initialize_stack()
@@ -115,8 +126,7 @@ set_public_ip()
   project=$(basename $BRANCH_ROOT | sed 's/\./-/g')
   # Wildcard DNS 1
   # vhost="$project.wd1.condurachi.ro"
-  customDomain="gtacty.co"
-  vhost="$project.$customDomain"
+  vhost="$project.$CUSTOMDOMAIN"
   sudo runuser -l $BRANCH -c "echo \"VIRTUAL_HOST=$vhost\" > $LOCAL_DOCKSAL"
   ##################
 
@@ -135,13 +145,13 @@ set_public_ip()
   ##################
 
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; fin p start"
-  cd $PROJECT_ROOT
-  sudo fin db dump db/dump.sql
-  sudo cp -rf "$PROJECT_ROOT/db" "$BRANCH_ROOT"
-  sudo chown -R $BRANCH:$BRANCH "$BRANCH_ROOT/db"
-  echo-green "Importing database..."
-  # sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; tar -zxvf $BRANCH_ROOT/db/*.gz"
-  sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; fin db import $BRANCH_ROOT/db/*.sql --progress"
+#  cd $PROJECT_ROOT
+#  sudo fin db dump db/dump.sql
+#  sudo cp -rf "$PROJECT_ROOT/db" "$BRANCH_ROOT"
+#  sudo chown -R $BRANCH:$BRANCH "$BRANCH_ROOT/db"
+#  echo-green "Importing database..."
+#  # sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; tar -zxvf $BRANCH_ROOT/db/*.gz"
+#  sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; fin db import $BRANCH_ROOT/db/*.sql --progress"
 }
 
 get_ssl() 
@@ -152,8 +162,7 @@ get_ssl()
   # Grab the project root directory name
   project=$(basename $BRANCH_ROOT | sed 's/\./-/g')
   # Wildcard DNS 1
-  customDomain="gtacty.co"
-  vhost="$project.$customDomain"
+  vhost="$project.$CUSTOMDOMAIN"
 
   fin p start
 
@@ -161,8 +170,8 @@ get_ssl()
 if [ $vhost != *.docksal ]; then
   if [ -f /usr/bin/certbot ]; then
     # Wildcard DNS
-    sudo cp -r "$BRANCH_DIR/.docksal/certs/$customDomain.crt" "$BRANCH_DIR/.docksal/certs/$vhost.crt"
-    sudo cp -r "$BRANCH_DIR/.docksal/certs/$customDomain.key" "$BRANCH_DIR/.docksal/certs/$vhost.key"
+    sudo cp -r "$BRANCH_DIR/.docksal/certs/$CUSTOMDOMAIN.crt" "$BRANCH_DIR/.docksal/certs/$vhost.crt"
+    sudo cp -r "$BRANCH_DIR/.docksal/certs/$CUSTOMDOMAIN.key" "$BRANCH_DIR/.docksal/certs/$vhost.key"
     sudo chown -R $BRANCH:$BRANCH $BRANCH_DIR/.docksal
 
     # Fix DOCROOT variable, hardcoding for now
