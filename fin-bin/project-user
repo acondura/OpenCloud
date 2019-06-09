@@ -50,7 +50,7 @@ fi
 # The user's home dir
 USER_HOME="$ROOT_HOME_DIR/$USER"
 
-if [ -z "$2" ]
+if [ -z "$2" ]; then
   REPO="$2"
 fi
 
