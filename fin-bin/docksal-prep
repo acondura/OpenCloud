@@ -23,8 +23,7 @@ clear
 # If floating IP supplied
 if [ ! -z "$1" ]; then
   FLOATING_IP="$1"
-  EXISTING=$(crontab -u docksal -l);
-  echo -e "$EXISTING\n@reboot ip addr add $FLOATING dev eth0" | crontab -u docksal -
+  echo -e "@reboot ip addr add $FLOATING dev eth0" | crontab -
 fi
 
 echo -e " - ${NC}${green} Updating packages...${NC}"
