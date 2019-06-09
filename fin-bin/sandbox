@@ -36,7 +36,7 @@ else
   CUSTOMDOMAIN="$2"
 fi
 
-if [ -z "$PWD/.docksal" ]; then
+if [ ! -d $PWD/.docksal ]; then
   echo-red "Cannot detect project root. Please make sure you run the sandbox command from a Dockal project's root folder."
   exit 1
 fi
