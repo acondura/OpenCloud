@@ -53,6 +53,7 @@ USER_HOME="$ROOT_HOME_DIR/$USER"
 if [ -z "$2" ]; then
   REPO="$2"
 fi
+echo "repo: $REPO"
 
 create_project_user()
 {
@@ -103,9 +104,9 @@ create_project_user()
     if [ ! -z "$REPO" ]; then
       echo " - Pulling the repository"
       echo ""
-      sudo runuser -l $USER -c "cd $USER_HOME; git clone $REPO"
-      sudo runuser -l $USER -c "cd $USER_HOME; git config --global user.email 'you@example.com'"
-      sudo runuser -l $USER -c "cd $USER_HOME; git config --global user.name '$USER'"
+      sudo runuser -l $USER -c "cd $USER_HOME/project; git clone $REPO"
+      sudo runuser -l $USER -c "cd $USER_HOME/project; git config --global user.email 'you@example.com'"
+      sudo runuser -l $USER -c "cd $USER_HOME/project; git config --global user.name '$USER'"
     fi
 
     sudo cp -r "/home/docksal/.docksal" $USER_HOME
