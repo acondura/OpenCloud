@@ -28,7 +28,7 @@ if [ -z "$1" ]
   then
     echo "No project user supplied"
     echo ""
-    echo "--Example: ./project-user USER_NAME HOME_DIR"
+    echo "--Example: ./project-user USER_NAME HOME_DIR GIT_REPO"
     echo ""
     echo "  HOME_DIR is optional, you can use it to set a custom home dir, e.g /mnt/sandbox (Please make sure your HDD/SSD drive is mounted). By default it uses the /home dir. Useful in cases where the root partition is small (e.g. 50GB) and the mounted drive is larger (e.g. 250GB)."
     echo ""
