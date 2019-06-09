@@ -96,6 +96,9 @@ create_project_user()
     VIMPROC="https://github.com/Shougo/vimproc.vim.git"
     sudo runuser -l $USER -c "cd $USER_HOME; git clone $VIMPROC" >/dev/null 2>&1
 
+    sudo runuser -l $USER -c "cd $USER_HOME; git config --global user.email 'you@example.com'"
+    sudo runuser -l $USER -c "cd $USER_HOME; git config --global user.name '$USER'"
+
     sudo cp -r "/home/docksal/.docksal" $USER_HOME
     sudo cp -r "/home/docksal/.ssh" "$USER_HOME"
     sudo chmod 755 "$USER_HOME/.ssh"
@@ -105,7 +108,8 @@ create_project_user()
 
     sudo usermod -aG docker $USER 
 
-    echo-green " - You can now login with $USER@[IP/DOMAIN]"
+    echo-green " - You can now login with $USER@[IP/DOMAIN] if you want to start working on it."
+    echo-green "   If you want to set up a sandbox user you can continue with the 'sandbox [USER]' command."
     echo ""
   fi
 }
