@@ -112,6 +112,7 @@ create_project_user()
       sudo runuser -l $USER -c "cd $USER_HOME/project; git clone $REPOSITORY $USER"
       sudo runuser -l $USER -c "cd $USER_HOME/project; git config --global user.email 'you@example.com'"
       sudo runuser -l $USER -c "cd $USER_HOME/project; git config --global user.name '$USER'"
+      sudo runuser -l $USER -c "mkdir $USER_HOME/project/$USER/db"
       echo ""
     fi
     sudo chown -R $USER:$USER $USER_HOME > /dev/null
