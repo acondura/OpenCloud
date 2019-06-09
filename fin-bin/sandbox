@@ -219,6 +219,8 @@ fi
 
 echo ""
 echo-green "1. Create sandbox user based on given branch: '$BRANCH'"
+echo-green "   Making sure Docksal is running"
+fin system start
 create_sandbox_user
 
 echo ""
