@@ -35,7 +35,7 @@ if [ -z "$1" ]
     exit 1
 fi
 
-# If domain is not given, set a default one
+# If top level domain is not given, set a default one
 if [ -z "$2" ]; then
   CUSTOMDOMAIN="gtacty.co"
 else
