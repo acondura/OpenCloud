@@ -126,7 +126,7 @@ echo ""
 echo ""
   echo-red "Make sure you add the following server SSH public key to your repository:"
 echo ""
-  cat "${NC}${green} /home/docksal/.ssh/id_rsa.pub${NC}"
+  cat /home/docksal/.ssh/id_rsa.pub | echo-yellow
 echo ""
   echo -e "${green} Rebooting the server to apply settings...${NC}"
 echo ""
