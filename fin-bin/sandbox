@@ -96,7 +96,13 @@ get_repo()
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git init" > /dev/null
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git branch $BRANCH"
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git checkout $BRANCH"
-  sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git pull origin $BRANCH"
+
+  exists=$(git show-ref refs/heads/$BRANCH)
+  if [ -n "$exists" ]; then
+    echo 'Branch $BRANCH exists, pulling it..'
+    sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git pull origin $BRANCH"
+  fi
+
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git config --global user.email 'you@example.com'"
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git config --global user.name '$BRANCH'"
 }
