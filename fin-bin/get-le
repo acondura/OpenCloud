@@ -45,6 +45,7 @@ sudo certbot certonly \
   --agree-tos \
   -d $1 -d *.$1
 
+sudo mkdir -p /home/docksal/.docksal/certs
 sudo cp -rfH /etc/letsencrypt/live/$1/fullchain.pem /home/docksal/.docksal/certs/$1.crt
 sudo cp -rfH /etc/letsencrypt/live/$1/privkey.pem /home/docksal/.docksal/certs/$1.key
 sudo chown -R docksal:docksal /home/docksal/.docksal/certs
