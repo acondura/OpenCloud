@@ -109,7 +109,7 @@ create_project_user()
 
     if [ ! -z "$REPOSITORY" ]; then
       echo-green " - Pulling the repository"
-      sudo runuser -l $USER -c "cd $USER_HOME/project; git clone $REPOSITORY"
+      sudo runuser -l $USER -c "cd $USER_HOME/project; git clone $REPOSITORY $USER"
       sudo runuser -l $USER -c "cd $USER_HOME/project; git config --global user.email 'you@example.com'"
       sudo runuser -l $USER -c "cd $USER_HOME/project; git config --global user.name '$USER'"
       echo ""
