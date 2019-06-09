@@ -23,7 +23,7 @@ clear
 # If floating IP supplied
 if [ ! -z "$1" ]; then
   FLOATING_IP="$1"
-  echo -e "@reboot ip addr add $FLOATING dev eth0" | crontab -
+  echo -e "@reboot ip addr add $FLOATING_IP dev eth0" | crontab -
 fi
 
 echo -e " - ${NC}${green} Updating packages...${NC}"
