@@ -101,6 +101,8 @@ create_project_user()
     sudo runuser -l $USER -c "cd $USER_HOME; git clone $VIMPROC" >/dev/null 2>&1
 
     if [ ! -z "$REPO" ]; then
+      echo " - Pulling the repository"
+      echo ""
       sudo runuser -l $USER -c "cd $USER_HOME; git clone $REPO"
       sudo runuser -l $USER -c "cd $USER_HOME; git config --global user.email 'you@example.com'"
       sudo runuser -l $USER -c "cd $USER_HOME; git config --global user.name '$USER'"
