@@ -50,8 +50,8 @@ fi
 # The user's home dir
 USER_HOME="$ROOT_HOME_DIR/$USER"
 
-if [ -z "$2" ]; then
-  REPO="$2"
+if [ -z "$3" ]; then
+  REPO="$3"
 fi
 echo "repo: $REPO"
 
