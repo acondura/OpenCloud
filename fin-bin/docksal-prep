@@ -124,9 +124,9 @@ echo ""
   runuser -l docksal -c 'fin system reset'
 
 echo ""
-  echo "Make sure you add the following server SSH public key to your repository:"
+  echo-red "Make sure you add the following server SSH public key to your repository:"
 echo ""
-  cat /home/docksal/.ssh/id_rsa.pub
+  cat "${NC}${green} /home/docksal/.ssh/id_rsa.pub${NC}"
 echo ""
   echo -e "${green} Rebooting the server to apply settings...${NC}"
 echo ""
