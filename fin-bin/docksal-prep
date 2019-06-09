@@ -67,6 +67,9 @@ echo ""
 ##### SSH Client settings (ssh_config)
   sed -i '/.*PasswordAuthentication.*/d' /etc/ssh/ssh_config
   echo 'PasswordAuthentication no' >> /etc/ssh/ssh_config
+
+  sed -i '/.*StrictHostKeyChecking.*/d' /etc/ssh/ssh_config
+  echo 'StrictHostKeyChecking no' >> /etc/ssh/ssh_config
 #-------------------------------------------------------
 
 ##### SSH Server settings (sshd_config)
