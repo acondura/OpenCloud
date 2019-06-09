@@ -57,6 +57,7 @@ create_project_user()
     echo-yellow "User '$USER' exists, go to $USER_HOME"
   else
     echo-green " - Creating user '$USER' using home: '$USER_HOME'"
+    echo ""
 
     # No password, we're using SSH keys
     # No interaction
@@ -66,6 +67,7 @@ create_project_user()
     
     # Make sure the user's home is owned by the user
     echo-green " - Making sure the user's home is owned by the user"
+    echo ""
     sudo chown -R $USER:$USER $USER_HOME > /dev/null
 
     # If the 'project' dir doesn't exist, create it
@@ -75,18 +77,22 @@ create_project_user()
     fi
 
     echo-green " - Installing 'Oh My ZSH!'"
+    echo ""
     OH_MY_ZSH="https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh"
     sudo runuser -l $USER -c "cd $USER_HOME; curl -fsSL $OH_MY_ZSH | bash" >/dev/null 2>&1
 
     echo-green " - Installing SpaceVIM"
+    echo ""
     SPACEVIM="https://spacevim.org/install.sh"
     sudo runuser -l $USER -c "cd $USER_HOME; curl -sLf $SPACEVIM | bash" >/dev/null 2>&1
 
     # Point VIM to use SPACEVIM
     echo-green " - Making sure Vim uses SpaceVIM"
+    echo ""
     sudo ln -s $USER_HOME/.SpaceVim $USER_HOME/.vim > /dev/null
 
     echo-green " - Installing vimproc for interactive command execution in Vim"
+    echo ""
     VIMPROC="https://github.com/Shougo/vimproc.vim.git"
     sudo runuser -l $USER -c "cd $USER_HOME; git clone $VIMPROC" >/dev/null 2>&1
 
@@ -100,6 +106,7 @@ create_project_user()
     sudo usermod -aG docker $USER 
 
     echo-green " - You can now login with $USER@[IP/DOMAIN]"
+    echo ""
   fi
 }
 

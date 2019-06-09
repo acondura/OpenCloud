@@ -39,7 +39,7 @@ unattended-upgrade -d >/dev/null 2>&1
 apt-get -y install apt-transport-https ca-certificates gnupg2 software-properties-common host >/dev/null
 
 # Install Oh my ZSH
-echo -e " - ${NC}${green} Installing required packages (zsh, git, gcc, etc.)...${NC}"
+echo -e " - ${NC}${green} Installing some required packages (zsh, unzip, etc.)...${NC}"
 echo ""
 apt-get -y install curl zsh git p7zip-full tmux pv parallel unzip >/dev/null
 
