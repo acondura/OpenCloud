@@ -95,6 +95,7 @@ get_repo()
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git init" > /dev/null
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git branch $BRANCH"
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git checkout $BRANCH"
+  sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git pull origin $BRANCH"
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git config --global user.email 'you@example.com'"
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git config --global user.name '$BRANCH'"
 }
@@ -236,7 +237,7 @@ echo-green "4. Set public IP and domain for branch..."
 set_public_ip
 
 echo ""
-echo-green "5. Copying SSL certificates if they exist in 'docksal' user..."
+echo-green "5. Copying SSL certificates if they exist in '/home/docksal/.docksal/certs'..."
 get_ssl
 
 # Make sure everything is owned by the branch
