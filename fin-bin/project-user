@@ -22,6 +22,7 @@ echo-green-bg () { echo -e "${green_bg}$1${NC}"; }
 echo-yellow () { echo -e "${yellow}$1${NC}"; }
 
 #-------------------------- Execution --------------------------------
+
 clear
 if [ -z "$1" ]
   then
@@ -46,9 +47,12 @@ if [ $# -eq 2 ]; then
     ROOT_HOME_DIR="$2"
   fi
 fi
-
 # The user's home dir
 USER_HOME="$ROOT_HOME_DIR/$USER"
+
+if [ -z "$2" ]
+  REPO="$2"
+fi
 
 create_project_user()
 {
@@ -96,8 +100,11 @@ create_project_user()
     VIMPROC="https://github.com/Shougo/vimproc.vim.git"
     sudo runuser -l $USER -c "cd $USER_HOME; git clone $VIMPROC" >/dev/null 2>&1
 
-    sudo runuser -l $USER -c "cd $USER_HOME; git config --global user.email 'you@example.com'"
-    sudo runuser -l $USER -c "cd $USER_HOME; git config --global user.name '$USER'"
+    if [ ! -z "$REPO" ]; then
+      sudo runuser -l $USER -c "cd $USER_HOME; git clone $REPO"
+      sudo runuser -l $USER -c "cd $USER_HOME; git config --global user.email 'you@example.com'"
+      sudo runuser -l $USER -c "cd $USER_HOME; git config --global user.name '$USER'"
+    fi
 
     sudo cp -r "/home/docksal/.docksal" $USER_HOME
     sudo cp -r "/home/docksal/.ssh" "$USER_HOME"
