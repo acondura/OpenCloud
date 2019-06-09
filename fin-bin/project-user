@@ -50,10 +50,10 @@ fi
 # The user's home dir
 USER_HOME="$ROOT_HOME_DIR/$USER"
 
-if [ -z "$3" ]; then
-  REPO="$3"
+if [ ! -z "$3" ]; then
+  REPOSITORY="$3"
 fi
-echo "repo: $REPO"
+echo "repo: $REPOSITORY"
 
 create_project_user()
 {
@@ -101,10 +101,10 @@ create_project_user()
     VIMPROC="https://github.com/Shougo/vimproc.vim.git"
     sudo runuser -l $USER -c "cd $USER_HOME; git clone $VIMPROC" >/dev/null 2>&1
 
-    if [ ! -z "$REPO" ]; then
+    if [ ! -z "$REPOSITORY" ]; then
       echo " - Pulling the repository"
       echo ""
-      sudo runuser -l $USER -c "cd $USER_HOME/project; git clone $REPO"
+      sudo runuser -l $USER -c "cd $USER_HOME/project; git clone $REPOSITORY"
       sudo runuser -l $USER -c "cd $USER_HOME/project; git config --global user.email 'you@example.com'"
       sudo runuser -l $USER -c "cd $USER_HOME/project; git config --global user.name '$USER'"
     fi
