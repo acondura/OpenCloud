@@ -98,7 +98,8 @@ get_repo()
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git checkout $BRANCH"
 
   exists=$(git show-ref refs/heads/$BRANCH)
-  if [ -n "$exists" ]; then
+  # If the looked up branch returns a hash, then pull the branch locally
+  if [ ! -z "$exists" ]; then
     echo 'Branch $BRANCH exists, pulling it..'
     sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git pull origin $BRANCH"
   fi
