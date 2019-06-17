@@ -137,7 +137,7 @@ else
   # Restart Docksal
   runuser -l docksal -c 'fin system reset'
 
-  update_crontab
+  runuser -l docksal -c 'update_crontab'
 
   echo-red "Make sure you add the following server SSH public key to your repository:"
   echo ""
