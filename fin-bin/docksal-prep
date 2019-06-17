@@ -23,16 +23,16 @@ clear
 update_crontab() {
   # Docksal and Ubuntu updates should run once a day
   # Write out current crontab
-  crontab -l > usercron
+  runuser -l docksal -c 'crontab -l > usercron'
   # Docksal update
-  echo -e "0 0 * * * fin update" >> usercron
+  runuser -l docksal -c 'echo -e "0 0 * * * fin update" >> usercron'
   # Ubuntu update
-  echo -e "0 0 * * * sudo apt-get -y upgrade" >> usercron
+  runuser -l docksal -c 'echo -e "0 0 * * * sudo apt-get -y upgrade" >> usercron'
   # LetsEncrypt certificates update every 30 days, per LetsEncrypt.org recommendation
-  echo -e "0 0 1 * * sudo certbot renew" >> usercron
+  runuser -l docksal -c 'echo -e "0 0 1 * * sudo certbot renew" >> usercron'
   # Install new cron file
-  crontab usercron
-  rm usercron
+  runuser -l docksal -c 'crontab usercron'
+  runuser -l docksal -c 'rm -rf usercron'
 }
 
 # If floating IP supplied
@@ -137,7 +137,7 @@ else
   # Restart Docksal
   runuser -l docksal -c 'fin system reset'
 
-  runuser -l docksal -c 'update_crontab'
+  update_crontab
 
   echo-red "Make sure you add the following server SSH public key to your repository:"
   echo ""
