@@ -17,7 +17,3 @@ echo-green-bg () { echo -e "${green_bg}$1${NC}"; }
 echo-yellow () { echo -e "${yellow}$1${NC}"; }
 
 fin coder enable
-
-CODER_PASS=$(fin logs coder | grep Password | awk '{ print $5 }')
-
-echo-green "Coder UI:${yellow} http://${VIRTUAL_HOST}:8443${NC}, password: $CODER_PASS"

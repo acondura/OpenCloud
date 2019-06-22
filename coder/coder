@@ -114,8 +114,14 @@ coder_enable ()
 	fin stop cli
 	fin up
 
+	echo "  Grabbing the coder container ID..."
+  CODER_CONTAINER_ID=$(fin docker container ls | grep code-server | awk '{ print $1 }')
+  # fin docker exec -it $CODER_CONTAINER_ID sudo apt-get update >/dev/null 2>&1
+  fin docker exec -it $CODER_CONTAINER_ID sudo chown -R coder:coder /home/coder/project
+  fin docker exec -it $CODER_CONTAINER_ID sudo chown -R coder:coder /home/coder/certs
   CODER_PASS=$(fin logs coder | grep Password | awk '{ print $5 }')
-  echo-green "Coder UI:${yellow} http://${VIRTUAL_HOST}:8443${NC}, password: $CODER_PASS"
+  VHOST=$(fin config | grep -m 1 VIRTUAL_HOST: | awk '{ print $2 }')
+  echo-green "Coder UI:${yellow} http://$VHOST:8443${NC}, password: $CODER_PASS"
 }
 
 # Disable container and settings

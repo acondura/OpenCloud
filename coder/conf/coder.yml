@@ -1,7 +1,7 @@
   # Coder
   coder:
-    hostname: coder
     image: codercom/code-server 
+    user: coder
     ports:
       - 8443:8443
     volumes:

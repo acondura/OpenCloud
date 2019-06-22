@@ -134,6 +134,10 @@ else
 
   update_crontab
 
+  # Some VSCode prep
+  sudo bash -c "echo 'fs.inotify.max_user_watches=524288' >> /etc/sysctl.conf"
+  sudo sysctl -p
+
   echo-red "Make sure you add the following server SSH public key to your repository:"
   echo ""
   cat /home/docksal/.ssh/id_rsa.pub; echo ""
