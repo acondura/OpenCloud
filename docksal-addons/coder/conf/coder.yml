@@ -1,12 +1,10 @@
-  # Coder
   coder:
-    image: codercom/code-server 
-    user: coder
+    image: codercom/code-server
     ports:
       - 8443:8443
     volumes:
       - ${PROJECT_ROOT}:/home/coder/project
       - $HOME/.docksal/certs:/home/coder/certs
     command: --cert /home/coder/certs/${VIRTUAL_HOST}.crt --cert-key /home/coder/certs/${VIRTUAL_HOST}.key
-
-  
+    labels:
+      - io.docksal.virtual-host=${VIRTUAL_HOST}:8443
