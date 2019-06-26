@@ -112,7 +112,7 @@ else
 
   echo -e " - ${NC}${green} Setting up the 'docksal' user...${NC}"; echo ""
   runuser -l docksal -c 'git clone https://github.com/acondura/OpenCloud.git' >/dev/null 2>&1
-  echo 'export PATH="$PATH:/home/docksal/OpenCloud/fin-bin"' >> /home/docksal/.profile
+  echo 'export PATH="$PATH:/home/docksal/OpenCloud/docksal-binaries"' >> /home/docksal/.profile
   chown -R docksal:docksal /home/docksal/.profile
 
   runuser -l docksal -c "ssh-keygen -t rsa -b 4096 -N '' -f /home/docksal/.ssh/id_rsa" >/dev/null 2>&1
