@@ -24,7 +24,7 @@ update_crontab() {
   # Docksal and Ubuntu updates should run once a day
   # Echo new cron into cron file
   if [ ! -z "$FLOATING_IP" ]; then
-    runuser -l docksal -c "echo -e \"@reboot ip addr add $FLOATING_IP dev eth0\" >> usercron"
+    runuser -l docksal -c "echo -e \"@reboot sudo ip addr add $FLOATING_IP dev eth0\" >> usercron"
   fi
   # Docksal update
   runuser -l docksal -c 'echo -e "0 0 * * * fin update" >> usercron'
