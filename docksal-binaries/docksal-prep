@@ -17,30 +17,50 @@ echo-yellow () { echo -e "${yellow}$1${NC}"; }
 #-------------------------- Execution --------------------------------
 
 set -e
-
 clear
-
-update_crontab() {
-  # Docksal and Ubuntu updates should run once a day
-  # Echo new cron into cron file
-  if [ ! -z "$FLOATING_IP" ]; then
-    runuser -l docksal -c "echo -e \"@reboot sudo ip addr add $FLOATING_IP dev eth0\" >> usercron"
-  fi
-  # Docksal update
-  runuser -l docksal -c 'echo -e "0 0 * * * fin update" >> usercron'
-  # Ubuntu update
-  runuser -l docksal -c 'echo -e "0 0 * * * sudo apt-get -y upgrade" >> usercron'
-  # LetsEncrypt certificates update every 30 days, per LetsEncrypt.org recommendation
-  runuser -l docksal -c 'echo -e "0 0 1 * * sudo certbot renew" >> usercron'
-  # Install new cron file
-  runuser -l docksal -c 'crontab usercron'
-  runuser -l docksal -c 'rm -rf usercron'
-}
 
 # If floating IP supplied
 if [ ! -z "$1" ]; then
   FLOATING_IP="$1"
 fi
+
+update_crontab() {
+  # Docksal and Ubuntu updates should run once a day
+  # Docksal update
+  runuser -l docksal -c 'echo -e "0 0 * * * fin update" >> usercron'
+  # Ubuntu update
+  runuser -l docksal -c 'echo -e "0 0 * * * sudo apt-get -y upgrade" >> usercron'
+
+  # LetsEncrypt certificates update every 30 days, per LetsEncrypt.org recommendation
+  runuser -l docksal -c 'echo -e "0 0 1 * * sudo certbot renew" >> usercron'
+
+  # Install the new cron file
+  runuser -l docksal -c 'crontab usercron'
+  runuser -l docksal -c 'rm -rf usercron'
+}
+
+set_floating_ip() {
+  # Echo new cron into cron file
+  if [ ! -z "$FLOATING_IP" ]; then
+    runuser -l docksal -c "echo -e \"@reboot sudo ip addr add $FLOATING_IP dev eth0\" >> usercron"
+  fi
+
+  # Remove 'nameserver' lines from /etc/resolv.conf
+  sed -i '/^nameserver/d' /etc/resolv.conf
+  # Use Cloudflare's DNS
+  echo "nameserver 1.1.1.1" >> /etc/resolv.conf
+
+  sed -i 's/^iface eth0 inet dhcp$/iface eth0 inet static/g'
+
+  ADDR="address $FLOATING_IP"
+  NMASK="netmask 32"
+  GW=$(ip route list | grep -m1 default | awk '{ print $3 }')
+  sed -i "s/^#\s*dns-nameservers.*/$ADDR\n$NMASK\n$GW/g" /etc/network/interfaces.d/50-cloud-init.cfg
+
+  # Install the new cron file
+  runuser -l docksal -c 'crontab usercron'
+  runuser -l docksal -c 'rm -rf usercron'
+}
 
 echo -e " - ${NC}${green} Updating packages...${NC}"; echo ""
 

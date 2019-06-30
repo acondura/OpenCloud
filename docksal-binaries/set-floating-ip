@@ -1,0 +1,21 @@
+#! /usr/bin/env bash
+
+# If floating IP supplied
+if [ ! -z "$1" ]; then
+  FLOATING_IP="$1"
+fi
+
+# Remove 'nameserver' lines from /etc/resolv.conf
+sed -i '/^nameserver/d' /etc/resolv.conf
+# Use Cloudflare's DNS
+echo "nameserver 1.1.1.1" >> /etc/resolv.conf
+
+sed -i 's/^iface eth0 inet dhcp$/iface eth0 inet static/g'
+
+ADDR="    address $FLOATING_IP"
+NMASK="    netmask 32"
+GW="    $(ip route list | grep -m1 default | awk '{ print $3 }')"
+
+sed -i "s/^#\s*dns-nameservers.*/$ADDR\n$NMASK\n$GW/g" /etc/network/interfaces.d/50-cloud-init.cfg
+
+service restart networking
