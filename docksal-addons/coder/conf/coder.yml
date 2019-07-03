@@ -2,6 +2,9 @@
   coder:
     hostname: ide-${COMPOSE_PROJECT_NAME_SAFE}
     image: codercom/code-server
+    environment:
+      - FIXUID=$(id -u)
+      - FIXGID=$(id -g)
     volumes:
       - ${PROJECT_ROOT}:/home/coder/project
       - $HOME/.docksal/certs:/home/coder/certs
