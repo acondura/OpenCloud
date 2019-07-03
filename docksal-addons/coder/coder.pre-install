@@ -38,5 +38,8 @@ if (echo "$fin_config" | grep "  codercom/code-server:"); then
 	exit 1
 fi
 
+export FIXUID=$(id -u)
+export FIXGID=$(id -g)
+
 # All good
 exit 0
