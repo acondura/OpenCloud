@@ -14,7 +14,7 @@ sed -i 's/^iface eth0 inet dhcp$/iface eth0 inet static/g'
 
 ADDR="    address $FLOATING_IP"
 NMASK="    netmask 32"
-GW="    $(ip route list | grep -m1 default | awk '{ print $3 }')"
+GW="    gateway $(ip route list | grep -m1 default | awk '{ print $3 }')"
 
 sed -i "s/^#\s*dns-nameservers.*/$ADDR\n$NMASK\n$GW/g" /etc/network/interfaces.d/50-cloud-init.cfg
 

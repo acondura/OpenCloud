@@ -41,20 +41,30 @@ update_crontab() {
 
 set_floating_ip() {
   # Echo new cron into cron file
+  runuser -l docksal -c 'crontab -l > usercron'
   if [ ! -z "$FLOATING_IP" ]; then
+    # This makes sure the floating IP is added on reboot 
     runuser -l docksal -c "echo -e \"@reboot sudo ip addr add $FLOATING_IP dev eth0\" >> usercron"
   fi
 
   # Remove 'nameserver' lines from /etc/resolv.conf
   sed -i '/^nameserver/d' /etc/resolv.conf
-  # Use Cloudflare's DNS
+  # Make sure we don't leave out Docksal's resolver
+  echo "nameserver 192.168.64.100" >> /etc/resolv.conf
+  # Use Cloudflare's DNS - which is #1 on dnsperf.com
   echo "nameserver 1.1.1.1" >> /etc/resolv.conf
 
+  # Make sure eth0 is using static, not DHCP IP allocation
   sed -i 's/^iface eth0 inet dhcp$/iface eth0 inet static/g'
 
-  ADDR="address $FLOATING_IP"
-  NMASK="netmask 32"
-  GW=$(ip route list | grep -m1 default | awk '{ print $3 }')
+  # Prepare the 'address', leave the leading spaces
+  ADDR="    address $FLOATING_IP"
+  # Prepare the 'netmask', leave the leading spaces
+  NMASK="    netmask 32"
+  # Prepare the 'gateway', leave the leading spaces
+  # This part might be linux specific (tested only on Ubuntu 18)
+  GW="    gateway $(ip route list | grep -m1 default | awk '{ print $3 }')"
+  # Also might be linux specific
   sed -i "s/^#\s*dns-nameservers.*/$ADDR\n$NMASK\n$GW/g" /etc/network/interfaces.d/50-cloud-init.cfg
 
   # Install the new cron file
