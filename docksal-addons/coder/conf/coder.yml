@@ -1,7 +1,8 @@
 
   coder:
     hostname: ide-${COMPOSE_PROJECT_NAME_SAFE}
-    image: codercom/code-server
+    # image: codercom/code-server
+    image: acondura/code-server
     environment:
       - FIXUID=$(id -u)
       - FIXGID=$(id -g)

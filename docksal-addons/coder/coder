@@ -114,26 +114,6 @@ coder_enable ()
 	fin stop cli
 	fin up
 
-  echo "  Setting up Coder user permissions..."
-  CODER_CONTAINER_ID=$(fin docker container ls | grep ${COMPOSE_PROJECT_NAME_SAFE}_coder | awk '{ print $1 }')
-  FIXUID=$(id -u)
-  FIXGID=$(id -g)
-
-  USER=coder
-  GROUP=coder
-  fin docker exec -it $CODER_CONTAINER_ID sudo usermod -u $FIXUID coder
-  fin docker exec -it $CODER_CONTAINER_ID sudo groupmod -g $FIXGID coder
-  fin docker exec -it $CODER_CONTAINER_ID sudo wget --quiet -P /home/coder https://github.com/boxboat/fixuid/releases/download/v0.4/fixuid-0.4-linux-amd64.tar.gz
-  fin docker exec -it $CODER_CONTAINER_ID sudo tar -C /usr/local/bin -xzf /home/coder/fixuid-0.4-linux-amd64.tar.gz
-  fin docker exec -it $CODER_CONTAINER_ID sudo chown root:root /usr/local/bin/fixuid
-  fin docker exec -it $CODER_CONTAINER_ID sudo chmod 4755 /usr/local/bin/fixuid
-  fin docker exec -it $CODER_CONTAINER_ID sudo mkdir -p /etc/fixuid
-  fin docker exec -it $CODER_CONTAINER_ID sudo touch /etc/fixuid/config.yml
-  fin docker exec -it $CODER_CONTAINER_ID sudo chmod u+s /etc/fixuid/config.yml
-  fin docker exec -it $CODER_CONTAINER_ID sudo chmod -R 777 /etc/fixuid && sudo echo "user: $USER" > /etc/fixuid/config.yml && sudo echo "group: $GROUP" >> /etc/fixuid/config.yml
-  fin docker exec -it $CODER_CONTAINER_ID sudo chmod -R 755 /etc/fixuid
-  fin docker exec -it $CODER_CONTAINER_ID sudo fixuid -q
-
 	echo "  Generating Coder URL and password..."
   CODER_PASS=$(fin logs coder | grep Password | awk '{ print $5 }')
   VHOST=$(fin config | grep -m 1 VIRTUAL_HOST: | awk '{ print $2 }')
