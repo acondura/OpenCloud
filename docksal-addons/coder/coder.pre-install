@@ -38,8 +38,12 @@ if (echo "$fin_config" | grep "  acondura/code-server:"); then
 	exit 1
 fi
 
-export HOST_UID=$(id -u)
-export HOST_GID=$(id -g)
+FIXUID=$(id -u)
+FIXGID=$(id -g)
+sed -i '/^FIXUID/d' "$PROJECT_ROOT/.docksal/docksal-local.env"
+sed -i '/^FIXGID/d' "$PROJECT_ROOT/.docksal/docksal-local.env"
+echo "FIXUID=$FIXUID" >> "$PROJECT_ROOT/.docksal/docksal-local.env"
+echo "FIXGID=$FIXGID" >> "$PROJECT_ROOT/.docksal/docksal-local.env"
 
 # All good
 exit 0
