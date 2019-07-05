@@ -40,8 +40,13 @@ fi
 
 FIXUID=$(id -u)
 FIXGID=$(id -g)
-sed -i '/^FIXUID/d' "$PROJECT_ROOT/.docksal/docksal-local.env"
-sed -i '/^FIXGID/d' "$PROJECT_ROOT/.docksal/docksal-local.env"
+# If the docksal-local.env file already exists,
+# make sure the 'fixuid' variables are not set
+if [ -f "$PROJECT_ROOT/.docksal/docksal-local.env" ]; then
+  sed -i '/^\s*FIXUID/d' "$PROJECT_ROOT/.docksal/docksal-local.env"
+  sed -i '/^\s*FIXGID/d' "$PROJECT_ROOT/.docksal/docksal-local.env"
+fi
+# Add the 'fixuid' variables
 echo "FIXUID=$FIXUID" >> "$PROJECT_ROOT/.docksal/docksal-local.env"
 echo "FIXGID=$FIXGID" >> "$PROJECT_ROOT/.docksal/docksal-local.env"
 
