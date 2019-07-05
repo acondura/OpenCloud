@@ -102,7 +102,7 @@ yml_remove_service ()
 coder_enable ()
 {
 	# Check that coder is not already enabled
-	if (in_config "image: codercom/code-server"); then
+	if (in_config "image: acondura/code-server"); then
 		echo "  Coder support is already enabled." && exit
 	fi
 
@@ -130,7 +130,7 @@ coder_disable ()
 	fi
 
 	# Make sure coder is installed
-	if ! in_config "image: codercom/code-server"; then
+	if ! in_config "image: acondura/code-server"; then
 		echo "  Coder support is not enabled at the moment." && exit
 	fi
 
