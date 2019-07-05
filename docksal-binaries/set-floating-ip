@@ -3,21 +3,21 @@
 # If floating IP supplied
 if [ ! -z "$1" ]; then
   FLOATING_IP="$1"
+
+  # Remove 'nameserver' lines from /etc/resolv.conf
+  sudo sed -i '/^nameserver/d' /etc/resolv.conf
+  # Make sure we don't leave out Docksal's resolver
+  sudo echo "nameserver 192.168.64.100" >> /etc/resolv.conf
+  # Use Cloudflare's DNS
+  sudo echo "nameserver 1.1.1.1" >> /etc/resolv.conf
+
+  sudo sed -i 's/^iface eth0 inet dhcp$/iface eth0 inet static/g'
+
+  ADDR="    address $FLOATING_IP"
+  NMASK="    netmask 32"
+  GW="    gateway $(ip route list | grep -m1 default | awk '{ print $3 }')"
+
+  sudo sed -i "s/^#?\s*dns-nameservers.*/$ADDR\n$NMASK\n$GW/g" /etc/network/interfaces.d/50-cloud-init.cfg
+
+  sudo service networking restart 
 fi
-
-# Remove 'nameserver' lines from /etc/resolv.conf
-sudo sed -i '/^nameserver/d' /etc/resolv.conf
-# Make sure we don't leave out Docksal's resolver
-sudo echo "nameserver 192.168.64.100" >> /etc/resolv.conf
-# Use Cloudflare's DNS
-sudo echo "nameserver 1.1.1.1" >> /etc/resolv.conf
-
-sudo sed -i 's/^iface eth0 inet dhcp$/iface eth0 inet static/g'
-
-ADDR="    address $FLOATING_IP"
-NMASK="    netmask 32"
-GW="    gateway $(ip route list | grep -m1 default | awk '{ print $3 }')"
-
-sudo sed -i "s/^#?\s*dns-nameservers.*/$ADDR\n$NMASK\n$GW/g" /etc/network/interfaces.d/50-cloud-init.cfg
-
-sudo service networking restart 
