@@ -1,8 +1,9 @@
   goaccess:
-    hostname: goaccess
+    hostname: goaccess-${COMPOSE_PROJECT_NAME_SAFE}
     image: allinurl/goaccess
     volumes:
-      - ${PROJECT_ROOT}/goaccess/data:/srv/data:rw
-      - ${PROJECT_ROOT}/goaccess/html:/srv/report:rw
+      - ${PROJECT_ROOT}/goaccess/data:/srv/data
+      - ${PROJECT_ROOT}/goaccess/html:/srv/report
     labels:
-      - io.docksal.virtual-host=goaccess.${VIRTUAL_HOST}
+      - io.docksal.virtual-host=goaccess-${VIRTUAL_HOST}
+      - io.docksal.virtual-port=7890

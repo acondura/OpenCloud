@@ -25,13 +25,19 @@ echo-yellow () { echo -e "${yellow}$1${NC}"; }
 
 if [ -z "$1" ]
   then
-    echo "No argument supplied, please supply a user name."
+    echo "No argument supplied, please supply at least a user name."
+    echo ""
+    echo "USAGE:"
+    echo "  sandbox NAME [TLD_DOMAIN]"
+    echo "  - NAME - this can be any name which is going to be used as a Git branch AND in the URL"
+    echo "  - TLD_DOMAIN - NAME is going to be a subdomain of the TLD_DOMAIN used"
+    echo ""
     exit 1
 fi
 
 # If top level domain is not given, set a default one
 if [ -z "$2" ]; then
-  CUSTOMDOMAIN="gtacty.co"
+  CUSTOMDOMAIN="opncld.com"
 else
   CUSTOMDOMAIN="$2"
 fi

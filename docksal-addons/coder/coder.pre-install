@@ -52,8 +52,8 @@ echo "FIXGID=$FIXGID" >> "$PROJECT_ROOT/.docksal/docksal-local.env"
 
 # SSL
 if [ -f "~/.docksal/certs/$VIRTUAL_HOST.crt" ]; then
-  cp -rf "~/.docksal/certs/$VIRTUAL_HOST.crt" "~/.docksal/certs/ide-$VIRTUAL_HOST.crt"
-  cp -rf "~/.docksal/certs/$VIRTUAL_HOST.key" "~/.docksal/certs/ide-$VIRTUAL_HOST.key"
+  cp -rf "~/.docksal/certs/$VIRTUAL_HOST.crt" ~/.docksal/certs/ide-$VIRTUAL_HOST.crt
+  cp -rf "~/.docksal/certs/$VIRTUAL_HOST.key" ~/.docksal/certs/ide-$VIRTUAL_HOST.key
 fi
 
 # All good
