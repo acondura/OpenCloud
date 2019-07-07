@@ -107,7 +107,7 @@ get_repo()
   # If the looked up branch returns a hash, then pull the branch locally
   #if [ ! -z "$exists" ]; then
     #echo 'Branch $BRANCH exists, pulling it..'
-    sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git pull origin $BRANCH"
+    #sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git pull origin $BRANCH"
   # fi
 
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; git config --global user.email 'you@example.com'"
