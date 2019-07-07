@@ -44,7 +44,7 @@ delete_project_user()
     # TO DO: prompt for confirmation
     # TO DO: check if the project has sandboxes and delete those users as well
     sudo userdel -f -r $USER >/dev/null 2>&1
-    fin cleanup >/dev/null 2>&1
+    fin cleanup
   else
     echo-yellow "There's no user named '$USER'"
   fi
