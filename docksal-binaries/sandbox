@@ -154,6 +154,7 @@ set_public_ip()
   ### Set the right drush alias corresponding to the public domain
   ALIASES_FILE="$BRANCH_ROOT/drush/aliases.drushrc.php"
   sudo mkdir -p $BRANCH_ROOT/drush
+  sudo chown -R $BRANCH:$BRANCH $BRANCH_ROOT/drush
   if [ -f $ALIASES_FILE ]; then
     sudo rm -rf $ALIASES_FILE
   fi
