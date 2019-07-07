@@ -151,6 +151,10 @@ set_public_ip()
   sudo runuser -l $BRANCH -c "echo \"VIRTUAL_HOST=$vhost\" > $LOCAL_DOCKSAL"
   ##################
 
+  if [ ! -d "$BRANCH_ROOT/drush" ]; then
+    mkdir -p "$BRANCH_ROOT/drush"
+  fi
+
   ### Set the right drush alias corresponding to the public domain
   ALIASES_FILE="$BRANCH_ROOT/drush/aliases.drushrc.php"
   if [ -f $ALIASES_FILE ]; then
