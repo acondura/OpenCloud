@@ -39,7 +39,7 @@ delete_project_user()
 {
   # Check if user exists
   if id "$USER" >/dev/null 2>&1; then
-    echo-green "Deleting '$USER'"
+    echo-green "Deleting '$USER' user"
 
     # TO DO: prompt for confirmation
     # TO DO: check if the project has sandboxes and delete those users as well
