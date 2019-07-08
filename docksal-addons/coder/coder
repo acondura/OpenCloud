@@ -48,7 +48,8 @@ yml_prepare ()
 {
 	# Get yml version to use for a new file from existing stacks
 	YML_VERSION=$(head "$DOCKSAL_STACKS/volumes-bind.yml" | grep "version")
-	YML_DEFAULT_BODY="${YML_VERSION}\nservices:"
+	# YML_DEFAULT_BODY="${YML_VERSION}\nservices:"
+	YML_DEFAULT_BODY="services:"
 	NEW_STACK='DOCKSAL_STACK="default"'
 
 	# Source docksal.env
