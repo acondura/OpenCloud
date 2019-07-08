@@ -2,6 +2,7 @@
   coder:
     hostname: ide-${COMPOSE_PROJECT_NAME_SAFE}
     image: acondura/code-server
+    user: ${FIXUID:-1000}:${FIXGID:-1000}
     volumes:
       - ${PROJECT_ROOT}:/home/coder/project
       - $HOME/.docksal/certs:/home/coder/certs
