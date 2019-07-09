@@ -168,12 +168,16 @@ set_public_ip()
 
   sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; fin p start"
 
-  if [ -d "$PROJECT_ROOT/db" ]; then
-    if [ -f "$PROJECT_ROOT/db/dump.sql.gz" ]; then
-      echo-green "Importing database..."
-      sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; zcat < $PROJECT_ROOT/db/*.sql.gz | fin db import --progress"
-    fi
-  fi
+#  if [ -d "$PROJECT_ROOT/db" ]; then
+#    if [ -f "$PROJECT_ROOT/db/dump.sql.gz" ]; then
+#      echo-green "Importing database..."
+#      sudo runuser -l $BRANCH -c "cd $BRANCH_ROOT; zcat < $PROJECT_ROOT/db/*.sql.gz | fin db import --progress"
+#    fi
+#    if [ -f "$PROJECT_ROOT/db/dump.sql.gz" ]; then
+#      echo-green "Importing database..."
+#      fin docker image import db/db_image.tar.gz joccom_sailings
+#    fi
+#  fi
 }
 
 get_ssl() 
