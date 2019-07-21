@@ -26,7 +26,7 @@ if [ -f $HOME/.docksal/certs/$VIRTUAL_HOST.crt ]; then
     cp -rf $HOME/.docksal/certs/$VIRTUAL_HOST.key $HOME/.docksal/certs/ide-$VIRTUAL_HOST.key
   fi
 else # Else, create one with OpenSSL
-  CODER_CONTAINER_ID=$(fin docker container ls | grep ${COMPOSE_PROJECT_NAME_SAFE}_coder | awk '{ print $1 }')
+  CODER_CONTAINER_ID=$(fin docker container ls | grep "$COMPOSE_PROJECT_NAME_SAFE"_coder | awk '{ print $1 }')
   echo "COMPOSE_PROJECT_NAME_SAFE is $COMPOSE_PROJECT_NAME_SAFE"
   echo "container ID is $CODER_CONTAINER_ID"
   # Set Git username
