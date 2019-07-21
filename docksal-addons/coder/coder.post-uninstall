@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-rm -rf "$PROJECT_ROOT$DOCKSAL_YML_NEW"

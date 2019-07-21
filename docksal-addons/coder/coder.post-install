@@ -32,5 +32,3 @@ fin docker exec \
   -w /home/coder/code-server \
   -it $CODER_CONTAINER_ID \
   git config --global user.email "$COMPOSE_PROJECT_NAME_SAFE"
-
-rm -rf "$PROJECT_ROOT$DOCKSAL_YML_NEW"
