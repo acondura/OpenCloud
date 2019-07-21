@@ -89,7 +89,7 @@ yml_remove_service ()
 	local service="$1"
 	read -r -d '' CODE_TO_EXEC <<-EOF
 		yaml set $DOCKSAL_YML services.$service | grep -v '$service:' | tee $DOCKSAL_YML_NEW >/dev/null;
-		[[ -z "\$(yaml get $DOCKSAL_YML services)" ]] && rm '$DOCKSAL_YML' || mv $DOCKSAL_YML_NEW $DOCKSAL_YML
+		[[ -z "\$(yaml get $DOCKSAL_YML_NEW services)" ]] && rm '$DOCKSAL_YML' || mv $DOCKSAL_YML_NEW $DOCKSAL_YML
 	EOF
 	# Remove service. If no services left after that, then remove docksal.yml
 	fin exec "$CODE_TO_EXEC"
