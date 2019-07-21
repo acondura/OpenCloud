@@ -59,11 +59,11 @@ if [ -f $HOME/.docksal/certs/$VIRTUAL_HOST.crt ]; then
     cp -rf $HOME/.docksal/certs/$VIRTUAL_HOST.crt $HOME/.docksal/certs/ide-$VIRTUAL_HOST.crt
     cp -rf $HOME/.docksal/certs/$VIRTUAL_HOST.key $HOME/.docksal/certs/ide-$VIRTUAL_HOST.key
   fi
-else # Else, create one with OpenSSL
-  cd $HOME; \
-  openssl req -x509 -newkey rsa:4096 \
-    -keyout $HOME/.docksal/certs/ide-$VIRTUAL_HOST.key \
-    -out $HOME/.docksal/certs/ide-$VIRTUAL_HOST.crt -days 10000 -nodes -subj "/CN=ide-$VIRTUAL_HOST"
+#else # Else, create one with OpenSSL
+#  cd $HOME; \
+#  openssl req -x509 -newkey rsa:4096 \
+#    -keyout $HOME/.docksal/certs/ide-$VIRTUAL_HOST.key \
+#    -out $HOME/.docksal/certs/ide-$VIRTUAL_HOST.crt -days 10000 -nodes -subj "/CN=ide-$VIRTUAL_HOST"
 fi
 
 # All good
