@@ -17,4 +17,3 @@ echo-green-bg () { echo -e "${green_bg}$1${NC}"; }
 echo-yellow () { echo -e "${yellow}$1${NC}"; }
 
 fin coder enable
-rm -rf ${PROJECT_ROOT}/code-server
