@@ -22,9 +22,9 @@ echo-green-bg () { echo -e "${green_bg}$1${NC}"; }
 echo-yellow () { echo -e "${yellow}$1${NC}"; }
 die () { echo -e "$1"; exit 1; }
 
-DOCKSAL_YML=".docksal/docksal.yml"
-DOCKSAL_YML_NEW=".docksal/docksal.yml.new"
-DOCKSAL_ENV=".docksal/docksal.env"
+DOCKSAL_YML="$PROJECT_ROOT/.docksal/docksal.yml"
+DOCKSAL_YML_NEW="$PROJECT_ROOT/.docksal/docksal.yml.new"
+DOCKSAL_ENV="$PROJECT_ROOT/.docksal/docksal.env"
 DOCKSAL_STACKS="$HOME/.docksal/stacks"
 CODER_YML="$ADDON_ROOT/conf/coder.yml"
 
@@ -114,10 +114,6 @@ coder_enable ()
 	# Apply stack changes.
 	fin stop cli
 	fin up
-
-  CODER_CONTAINER_ID=$(fin docker container ls | grep ${COMPOSE_PROJECT_NAME_SAFE}_coder | awk '{ print $1 }')
-  # fin docker exec -it $CODER_CONTAINER_ID git config --global user.name "${COMPOSE_PROJECT_NAME_SAFE}"
-  # fin docker exec -it $CODER_CONTAINER_ID git config --global user.email "${COMPOSE_PROJECT_NAME_SAFE}"
 
 	echo "  Generating Coder URL and password..."
   CODER_PASS=$(fin logs coder | grep Password | awk '{ print $5 }')
