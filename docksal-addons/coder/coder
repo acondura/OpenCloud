@@ -22,9 +22,9 @@ echo-green-bg () { echo -e "${green_bg}$1${NC}"; }
 echo-yellow () { echo -e "${yellow}$1${NC}"; }
 die () { echo -e "$1"; exit 1; }
 
-DOCKSAL_YML="$PROJECT_ROOT/.docksal/docksal.yml"
-DOCKSAL_YML_NEW="$PROJECT_ROOT/.docksal/docksal.yml.new"
-DOCKSAL_ENV="$PROJECT_ROOT/.docksal/docksal.env"
+DOCKSAL_YML=".docksal/docksal.yml"
+DOCKSAL_YML_NEW=".docksal/docksal.yml.new"
+DOCKSAL_ENV=".docksal/docksal.env"
 DOCKSAL_STACKS="$HOME/.docksal/stacks"
 CODER_YML="$ADDON_ROOT/conf/coder.yml"
 
