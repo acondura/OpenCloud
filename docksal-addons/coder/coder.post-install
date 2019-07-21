@@ -30,6 +30,7 @@ else # Else, create one with OpenSSL
   C_NAME="$COMPOSE_PROJECT_NAME_SAFE$SERVICE"
   CODER_CONTAINER_ID=$(fin docker container ls | grep $C_NAME | awk '{ print $1 }')
   echo "COMPOSE_PROJECT_NAME_SAFE is $COMPOSE_PROJECT_NAME_SAFE"
+  echo "C_NAME is $C_NAME"
   echo "container ID is $CODER_CONTAINER_ID"
   # Set Git username
   fin docker exec \
