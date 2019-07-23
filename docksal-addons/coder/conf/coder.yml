@@ -4,7 +4,7 @@
     image: acondura/code-server
     user: ${FIXUID:-1000}:${FIXGID:-1000}
     volumes:
-      - ${PROJECT_ROOT}:/home/coder/code-server
+      - ${PROJECT_ROOT}:/home/coder/project/code-server
       - $HOME/.docksal/certs:/home/coder/certs
       - $HOME/.ssh:/home/coder/.ssh
     command: code-server --cert /home/coder/certs/ide-${VIRTUAL_HOST}.crt --cert-key /home/coder/certs/ide-${VIRTUAL_HOST}.key --allow-http -e /home/coder/.local/share/code-server/extensions

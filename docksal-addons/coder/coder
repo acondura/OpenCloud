@@ -97,8 +97,6 @@ yml_remove_service ()
 
 #-------------------------------------- coder functions ---------------------------------------------
 
-# Set/remove proper setting into php.ini
-# $1 - enable/disable
 # Enable container and settings
 coder_enable ()
 {
