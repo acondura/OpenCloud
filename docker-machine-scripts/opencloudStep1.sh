@@ -2,7 +2,7 @@ serverName=$1
 echo ""
 echo " 1. Create the server with Docker"
 docker-machine rm -y $serverName
-docker-machine create --driver=digitalocean --digitalocean-access-token=6ad0031012fb9e8e76ffb21d7679d76c1374a658abec6b45450eab603ac5a845 --digitalocean-image=debian-9-x64 --digitalocean-size 1gb --digitalocean-monitoring=true --digitalocean-region=tor1 $serverName
+docker-machine create --driver=digitalocean --digitalocean-access-token= --digitalocean-image=debian-9-x64 --digitalocean-size 1gb --digitalocean-monitoring=true --digitalocean-region=tor1 $serverName
 
 echo ""
 echo " 2. Set it as the active server to send commands to"
