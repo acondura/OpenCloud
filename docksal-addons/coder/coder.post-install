@@ -32,3 +32,15 @@ fin docker exec \
   -w /home/coder/project/code-server \
   -it $CODER_CONTAINER_ID \
   git config --global user.email "$COMPOSE_PROJECT_NAME_SAFE"
+
+# Set aliases
+fin docker exec \
+  -w /home/coder \
+  -it $CODER_CONTAINER_ID \
+  echo "alias l='ls -la'\nalias s='cd ..'" >> .bashrc
+
+# Copy id_rsa.pub in authorized_keys
+fin docker exec \
+  -w /home/coder/.ssh \
+  -it $CODER_CONTAINER_ID \
+  cat id_rsa.pub >> authorized_keys
