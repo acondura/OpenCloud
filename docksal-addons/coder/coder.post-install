@@ -18,17 +18,17 @@ echo-yellow () { echo -e "${yellow}$1${NC}"; }
 
 fin coder enable
 
-#SERVICE=_coder
-#C_NAME="$COMPOSE_PROJECT_NAME_SAFE$SERVICE"
-#CODER_CONTAINER_ID=$(fin docker container ls | grep $C_NAME | awk '{ print $1 }')
-## Set Git username
-#fin docker exec \
-#  -w /home/coder/code-server \
-#  -it $CODER_CONTAINER_ID \
-#  git config --global user.name "$COMPOSE_PROJECT_NAME_SAFE"
-#
-## Set Git email
-#fin docker exec \
-#  -w /home/coder/code-server \
-#  -it $CODER_CONTAINER_ID \
-#  git config --global user.email "$COMPOSE_PROJECT_NAME_SAFE"
+SERVICE=_coder
+C_NAME="$COMPOSE_PROJECT_NAME_SAFE$SERVICE"
+CODER_CONTAINER_ID=$(fin docker container ls | grep $C_NAME | awk '{ print $1 }')
+# Set Git username
+fin docker exec \
+  -w /home/coder/project/code-server \
+  -it $CODER_CONTAINER_ID \
+  git config --global user.name "$COMPOSE_PROJECT_NAME_SAFE"
+
+# Set Git email
+fin docker exec \
+  -w /home/coder/project/code-server \
+  -it $CODER_CONTAINER_ID \
+  git config --global user.email "$COMPOSE_PROJECT_NAME_SAFE"
