@@ -19,9 +19,7 @@ echo-yellow () { echo -e "${yellow}$1${NC}"; }
 fin coder enable
 
 SERVICE="_coder"
-echo $SERVICE
 C_NAME="$COMPOSE_PROJECT_NAME_SAFE$SERVICE"
-echo $C_NAME
 CODER_CONTAINER_ID=$(fin docker container ls | grep $C_NAME | awk '{ print $1 }')
 # Set Git username
 fin docker exec \
