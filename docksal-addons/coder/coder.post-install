@@ -17,32 +17,32 @@ echo-green-bg () { echo -e "${green_bg}$1${NC}"; }
 echo-yellow () { echo -e "${yellow}$1${NC}"; }
 
 fin coder enable
-
-SERVICE="_coder"
-echo $SERVICE
-C_NAME="$COMPOSE_PROJECT_NAME_SAFE$SERVICE"
-echo $C_NAME
-CODER_CONTAINER_ID=$(fin docker container ls | grep $C_NAME | awk '{ print $1 }')
-# Set Git username
-fin docker exec \
-  -w /home/coder/project/code-server \
-  -it $CODER_CONTAINER_ID \
-  git config --global user.name "$COMPOSE_PROJECT_NAME_SAFE"
-
-# Set Git email
-fin docker exec \
-  -w /home/coder/project/code-server \
-  -it $CODER_CONTAINER_ID \
-  git config --global user.email "$COMPOSE_PROJECT_NAME_SAFE"
-
-# Set aliases
-fin docker exec \
-  -w /home/coder \
-  -it $CODER_CONTAINER_ID \
-  bash -c "echo \"alias l='ls -la'\nalias s='cd ..'\" >> .bashrc"
-
-# Copy id_rsa.pub in authorized_keys
-fin docker exec \
-  -w /home/coder/.ssh \
-  -it $CODER_CONTAINER_ID \
-  bash -c "cat id_rsa.pub >> authorized_keys"
+#
+#SERVICE="_coder"
+#echo $SERVICE
+#C_NAME="$COMPOSE_PROJECT_NAME_SAFE$SERVICE"
+#echo $C_NAME
+#CODER_CONTAINER_ID=$(fin docker container ls | grep $C_NAME | awk '{ print $1 }')
+## Set Git username
+#fin docker exec \
+#  -w /home/coder/project/code-server \
+#  -it $CODER_CONTAINER_ID \
+#  git config --global user.name "$COMPOSE_PROJECT_NAME_SAFE"
+#
+## Set Git email
+#fin docker exec \
+#  -w /home/coder/project/code-server \
+#  -it $CODER_CONTAINER_ID \
+#  git config --global user.email "$COMPOSE_PROJECT_NAME_SAFE"
+#
+## Set aliases
+#fin docker exec \
+#  -w /home/coder \
+#  -it $CODER_CONTAINER_ID \
+#  bash -c "echo \"alias l='ls -la'\nalias s='cd ..'\" >> .bashrc"
+#
+## Copy id_rsa.pub in authorized_keys
+#fin docker exec \
+#  -w /home/coder/.ssh \
+#  -it $CODER_CONTAINER_ID \
+#  bash -c "cat id_rsa.pub >> authorized_keys"
