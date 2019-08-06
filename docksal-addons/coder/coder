@@ -181,7 +181,7 @@ case "$1" in
 		coder_getpass
 		;;
 	*)
-		echo "Usage: fin coder <enable|disable|restart>"
+		echo "Usage: fin coder <enable|disable|restart|getpass>"
 		exit 1
 		;;
 esac
