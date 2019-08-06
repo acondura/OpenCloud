@@ -142,6 +142,26 @@ coder_disable ()
 	fin up
 }
 
+# Get coder password
+coder_getpass ()
+{
+	echo "  Running checks..."
+	# Make sure cli container is running
+	if ! (fin ps | grep "_cli_" | grep "Up" >/dev/null); then
+		echo "  ERROR: Start the project with fin start first" && exit 1
+	fi
+
+	# Make sure coder is installed
+	if ! in_config "image: acondura/code-server"; then
+		echo "  Coder support is not enabled at the moment." && exit
+	fi
+
+	echo "  Generating Coder URL and password..."
+  CODER_PASS=$(fin logs coder | grep Password | tail -1 | awk '{ print $5 }')
+  VHOST=$(fin config | grep -m 1 VIRTUAL_HOST: | awk '{ print $2 }')
+  echo-green "Coder UI:${yellow} http://ide-$VHOST${NC}, password: $CODER_PASS"
+}
+
 #------------------------------------------ Runtime -----------------------------------------------
 
 cd "$PROJECT_ROOT"
@@ -156,6 +176,9 @@ case "$1" in
 	restart)
 		coder_disable
 		coder_enable
+		;;
+	getpass)
+		coder_getpass
 		;;
 	*)
 		echo "Usage: fin coder <enable|disable|restart>"
