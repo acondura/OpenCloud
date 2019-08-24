@@ -52,18 +52,19 @@ fi
 echo "FIXUID=$FIXUID" >> "$PROJECT_ROOT/.docksal/docksal-local.env"
 echo "FIXGID=$FIXGID" >> "$PROJECT_ROOT/.docksal/docksal-local.env"
 
-# SSL
-# If an SSL certificate already exists (e.g. LetsEncrypt), use it
-if [ -f $HOME/.docksal/certs/$VIRTUAL_HOST.crt ]; then
-  if [ ! -f $HOME/.docksal/certs/ide-$VIRTUAL_HOST.crt ]; then
-    cp -rf $HOME/.docksal/certs/$VIRTUAL_HOST.crt $HOME/.docksal/certs/ide-$VIRTUAL_HOST.crt
-    cp -rf $HOME/.docksal/certs/$VIRTUAL_HOST.key $HOME/.docksal/certs/ide-$VIRTUAL_HOST.key
+# If using local Docksal
+if [ $VIRTUAL_HOST == "*.docksal" ]; then
+  # Don't use SSL certs if not a public server
+  CODER_PARAMS="code-server --allow-http -e /home/coder/.local/share/code-server/extensions"
+else # Else, it's a server
+  # Use SSL certs since it's a public server
+  CODER_PARAMS="code-server --cert /home/coder/certs/ide-$VIRTUAL_HOST.crt --cert-key /home/coder/certs/ide-$VIRTUAL_HOST.key --allow-http -e /home/coder/.local/share/code-server/extensions"
+  if [ -f $HOME/.docksal/certs/$VIRTUAL_HOST.crt ]; then
+    if [ ! -f $HOME/.docksal/certs/ide-$VIRTUAL_HOST.crt ]; then
+      cp -rf $HOME/.docksal/certs/$VIRTUAL_HOST.crt $HOME/.docksal/certs/ide-$VIRTUAL_HOST.crt
+      cp -rf $HOME/.docksal/certs/$VIRTUAL_HOST.key $HOME/.docksal/certs/ide-$VIRTUAL_HOST.key
+    fi
   fi
-#else # Else, create one with OpenSSL
-#  cd $HOME; \
-#  openssl req -x509 -newkey rsa:4096 \
-#    -keyout $HOME/.docksal/certs/ide-$VIRTUAL_HOST.key \
-#    -out $HOME/.docksal/certs/ide-$VIRTUAL_HOST.crt -days 10000 -nodes -subj "/CN=ide-$VIRTUAL_HOST"
 fi
 
 # All good
