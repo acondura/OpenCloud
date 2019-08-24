@@ -7,6 +7,6 @@
       - ${PROJECT_ROOT}:/home/coder/project/code-server
       - $HOME/.docksal/certs:/home/coder/certs
       - $HOME/.ssh:/home/coder/.ssh
-    command: ${COMMAND_PARAMS}
+    command: ${CODER_PARAMS}
     labels:
       - io.docksal.virtual-host=ide-${VIRTUAL_HOST}
