@@ -68,8 +68,11 @@ else # Else, it's a server
   fi
 fi
 # Add extensions
+#1 - GitLens
+CODER_PARAMS="$CODER_PARAMS --install-extension eamodio.gitlens"
+#2 - PHP Debug
+CODER_PARAMS="$CODER_PARAMS --install-extension felixfbecker.php-debug"
 CODER_PARAMS="$CODER_PARAMS --install-extension bwildeman.tabulous"
-CODER_PARAMS="$CODER_PARAMS --install-extension marcostazi.VS-code-drupal"
 echo "CODER_PARAMS='$CODER_PARAMS'" >> "$PROJECT_ROOT/.docksal/docksal-local.env"
 
 # All good
