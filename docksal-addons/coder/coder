@@ -113,10 +113,16 @@ coder_enable ()
 	fin stop cli
 	fin up
 
-	echo "  Generating Coder URL and password..."
-  CODER_PASS=$(fin logs coder | grep Password | tail -1 | awk '{ print $5 }')
-  VHOST=$(fin config | grep -m 1 VIRTUAL_HOST: | awk '{ print $2 }')
-  echo-green "Coder UI:${yellow} http://ide-$VHOST${NC}, password: $CODER_PASS"
+  if [[ $VIRTUAL_HOST == *"docksal" ]]; then
+    echo "  Generating Coder URL..."
+    VHOST=$(fin config | grep -m 1 VIRTUAL_HOST: | awk '{ print $2 }')
+    echo-green "Coder UI:${yellow} http://ide-$VHOST${NC}"
+  else
+    echo "  Generating Coder URL and password..."
+    CODER_PASS=$(fin logs coder | grep Password | tail -1 | awk '{ print $5 }')
+    VHOST=$(fin config | grep -m 1 VIRTUAL_HOST: | awk '{ print $2 }')
+    echo-green "Coder UI:${yellow} http://ide-$VHOST${NC}, password: $CODER_PASS"
+  fi
 }
 
 # Disable container and settings

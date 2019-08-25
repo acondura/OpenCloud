@@ -44,18 +44,19 @@ FIXGID=$(id -g)
 # make sure the 'fixuid' variables are not set
 if [ -f "$PROJECT_ROOT/.docksal/docksal-local.env" ]; then
   # Delete the FIXUID line
-  sed -i '/.*FIXUID.*/d' "$PROJECT_ROOT/.docksal/docksal-local.env"
+  perl -i -pe"s/.*FIXUID.*\r\n//g" "$PROJECT_ROOT/.docksal/docksal-local.env"
   # Delete the FIGUID line
-  sed -i '/.*FIXGID.*/d' "$PROJECT_ROOT/.docksal/docksal-local.env"
+  perl -i -pe"s/.*FIXGID.*\r\n//g" "$PROJECT_ROOT/.docksal/docksal-local.env"
 fi
 # Add the 'fixuid' variables
 echo "FIXUID=$FIXUID" >> "$PROJECT_ROOT/.docksal/docksal-local.env"
 echo "FIXGID=$FIXGID" >> "$PROJECT_ROOT/.docksal/docksal-local.env"
 
+perl -i -pe"s/.*CODER_PARAMS.*\r\n//g" "$PROJECT_ROOT/.docksal/docksal-local.env"
 # If using local Docksal
-if [ $VIRTUAL_HOST == "*.docksal" ]; then
+if [[ $VIRTUAL_HOST == *"docksal" ]]; then
   # Don't use SSL certs if not a public server
-  CODER_PARAMS="code-server --allow-http -e /home/coder/.local/share/code-server/extensions"
+  CODER_PARAMS="code-server --no-auth --allow-http -e /home/coder/.local/share/code-server/extensions"
 else # Else, it's a server
   # Use SSL certs since it's a public server
   CODER_PARAMS="code-server --cert /home/coder/certs/ide-$VIRTUAL_HOST.crt --cert-key /home/coder/certs/ide-$VIRTUAL_HOST.key --allow-http -e /home/coder/.local/share/code-server/extensions"
@@ -66,6 +67,7 @@ else # Else, it's a server
     fi
   fi
 fi
+echo "CODER_PARAMS='$CODER_PARAMS'" >> "$PROJECT_ROOT/.docksal/docksal-local.env"
 
 # All good
 exit 0
