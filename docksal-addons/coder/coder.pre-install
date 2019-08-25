@@ -68,7 +68,7 @@ else # Else, it's a server
   fi
 fi
 # Add extensions
-CODER_PARAMS="$CODER_PARAMS --install-extension BenWildeman.vscode-tabulous"
+CODER_PARAMS="$CODER_PARAMS --install-extension BenWildeman.tabulous"
 echo "CODER_PARAMS='$CODER_PARAMS'" >> "$PROJECT_ROOT/.docksal/docksal-local.env"
 
 # All good
